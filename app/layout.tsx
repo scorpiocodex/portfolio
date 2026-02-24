@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const baseUrl = "https://san-shibu.vercel.app";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
