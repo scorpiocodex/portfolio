@@ -1,48 +1,10 @@
-"use client";
+import { ContributionWeek, GitHubData } from "@/lib/github";
+import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
+import { ExternalLinkIcon, GithubIcon, StarIcon } from "./icons";
 
-import { FadeIn, FadeInStagger, FadeInItem } from "./FadeIn";
-import { GithubIcon, ExternalLinkIcon, StarIcon } from "./icons";
+export default function GitHub({ data }: { data: GitHubData }) {
+  const { user, repos, contributions } = data;
 
-const PINNED_REPOS = [
-  {
-    name: "Watchflow",
-    description: "Next-gen pipeline automation CLI — define NLP intents in YAML to trigger topological shell workflows on file changes. Daemon orchestration + dry-run simulation.",
-    language: "Python",
-    langColor: "#3572A5",
-    stars: "—",
-    url: "https://github.com/scorpiocodex/Watchflow",
-    accent: "#58A6FF",
-  },
-  {
-    name: "Termbackup",
-    description: "Advanced zero-knowledge backup architecture interfacing directly with the GitHub API. Mathematically enforced security and next-gen terminal UI paradigms.",
-    language: "Python",
-    langColor: "#3572A5",
-    stars: "—",
-    url: "https://github.com/scorpiocodex/Termbackup",
-    accent: "#7C3AED",
-  },
-  {
-    name: "Fluxion",
-    description: "The Intelligent Network Command Engine — CLI download accelerator with adaptive parallel transport, TLS deep inspection, and HTTP/2 · HTTP/3 QUIC · FTP · SFTP · SCP.",
-    language: "Python",
-    langColor: "#3572A5",
-    stars: "—",
-    url: "https://github.com/scorpiocodex/Fluxion",
-    accent: "#00E5FF",
-  },
-  {
-    name: "Tasklite",
-    description: "Simple tasks. Clean flow. Full-stack todo app built with Node.js/Express and Vanilla JS — optimistic UI, dark mode, inline editing & LocalStorage persistence.",
-    language: "JavaScript",
-    langColor: "#F7DF1E",
-    stars: "—",
-    url: "https://github.com/scorpiocodex/Tasklite",
-    accent: "#3FB950",
-  },
-];
-
-export default function GitHub() {
   return (
     <section id="github" className="py-24 lg:py-32">
       <div className="max-w-content mx-auto px-6">
@@ -59,29 +21,34 @@ export default function GitHub() {
 
         {/* Profile row */}
         <FadeIn delay={0.05} className="mb-10">
-          <div className="flex items-center gap-4 p-5 rounded-card border border-border bg-surface/40 max-w-md">
-            <div className="w-12 h-12 rounded-full bg-surface-2 border border-border flex items-center justify-center shrink-0">
-              <GithubIcon className="w-6 h-6 text-text-secondary" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 sm:p-5 rounded-card border border-border bg-surface/40 max-w-md">
+            <div className="w-12 h-12 rounded-full bg-surface-2 border border-border flex items-center justify-center shrink-0 overflow-hidden">
+              {user.avatarUrl ? (
+                // Using standard img tag instead of next/image here since GitHub hosts the images
+                <img src={user.avatarUrl} alt={user.login} className="w-full h-full object-cover" />
+              ) : (
+                <GithubIcon className="w-6 h-6 text-text-secondary" />
+              )}
             </div>
             <div>
               <div className="font-space-grotesk text-base font-semibold text-text-primary">
-                San Shibu
+                {user.name}
               </div>
               <a
-                href="https://github.com/scorpiocodex"
+                href={user.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-mono text-[12px] text-accent hover:text-glow transition-colors flex items-center gap-1 mt-0.5"
               >
-                @scorpiocodex
+                @{user.login}
                 <ExternalLinkIcon className="w-3 h-3" />
               </a>
             </div>
             <a
-              href="https://github.com/scorpiocodex"
+              href={user.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-auto flex items-center gap-2 text-[11px] font-mono text-text-secondary border border-border px-3 py-1.5 rounded-lg hover:border-accent hover:text-accent transition-all duration-200 shrink-0"
+              className="sm:ml-auto flex items-center gap-2 text-[11px] font-mono text-text-secondary border border-border px-3 py-1.5 rounded-lg hover:border-accent hover:text-accent transition-all duration-200 shrink-0 w-full sm:w-auto justify-center sm:justify-start"
             >
               View Profile
               <ExternalLinkIcon className="w-3 h-3" />
@@ -99,7 +66,7 @@ export default function GitHub() {
         {/* Repo cards */}
         <FadeInStagger staggerDelay={0.08}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {PINNED_REPOS.map((repo) => (
+            {repos.map((repo) => (
               <FadeInItem key={repo.name}>
                 <a
                   href={repo.url}
@@ -151,10 +118,10 @@ export default function GitHub() {
           <div className="p-5 rounded-card border border-border bg-surface/30">
             <div className="flex items-center justify-between mb-4">
               <span className="font-mono text-[11px] text-text-secondary tracking-widest uppercase">
-                Contribution Activity
+                Contribution Activity (Half Year)
               </span>
               <a
-                href="https://github.com/scorpiocodex"
+                href={user.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-mono text-[10px] text-accent hover:text-glow transition-colors"
@@ -164,7 +131,7 @@ export default function GitHub() {
             </div>
 
             <div className="overflow-x-auto pb-1">
-              <ContributionGrid />
+              <ContributionGrid weeks={contributions} />
             </div>
 
             <div className="flex items-center gap-2 mt-4 justify-end">
@@ -181,33 +148,20 @@ export default function GitHub() {
   );
 }
 
-function ContributionGrid() {
-  const weeks = 26;
-  const days = 7;
-  const colors = ["#161B22", "#0E4429", "#006D32", "#26A641", "#39D353"];
-
-  function getLevel(week: number, day: number): number {
-    const seed = week * 7 + day;
-    const pseudo = ((seed * 1103515245 + 12345) & 0x7fffffff) % 100;
-    if (pseudo < 40) return 0;
-    if (pseudo < 60) return 1;
-    if (pseudo < 75) return 2;
-    if (pseudo < 88) return 3;
-    return 4;
-  }
-
+function ContributionGrid({ weeks }: { weeks: ContributionWeek[] }) {
   return (
     <div className="flex gap-[3px]">
-      {Array.from({ length: weeks }).map((_, weekIdx) => (
+      {weeks.map((week, weekIdx) => (
         <div key={weekIdx} className="flex flex-col gap-[3px]">
-          {Array.from({ length: days }).map((_, dayIdx) => {
-            const level = getLevel(weekIdx, dayIdx);
+          {week.contributionDays.map((day, dayIdx) => {
+            // Use GitHub's standard colors or the fallback colors from the payload
+            const bgColor = day.color === "#ebedf0" ? "#161b22" : day.color;
             return (
               <div
                 key={dayIdx}
                 className="w-[10px] h-[10px] rounded-[2px]"
-                style={{ backgroundColor: colors[level] }}
-                title={`Week ${weekIdx + 1}, Day ${dayIdx + 1}`}
+                style={{ backgroundColor: bgColor }}
+                title={`${day.contributionCount} contributions on ${day.date || "unknown date"}`}
               />
             );
           })}

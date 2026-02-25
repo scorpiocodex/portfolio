@@ -1,6 +1,7 @@
 "use client";
 
-import { FadeIn, FadeInStagger, FadeInItem } from "./FadeIn";
+import { motion } from "framer-motion";
+import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 
 interface SkillGroup {
   category: string;
@@ -50,10 +51,10 @@ const SKILL_GROUPS: SkillGroup[] = [
   },
 ];
 
-const LEVEL_STYLE: Record<string, string> = {
-  core:      "bg-accent/10 border-accent/25 text-accent",
-  proficient: "bg-surface border-border text-text-primary",
-  familiar:  "bg-surface/50 border-border/50 text-text-secondary",
+const LEVEL_PERCENTAGE: Record<string, number> = {
+  core: 95,
+  proficient: 80,
+  familiar: 60,
 };
 
 export default function Skills() {
@@ -102,23 +103,43 @@ export default function Skills() {
                     </h3>
                   </div>
 
-                  {/* Skills */}
-                  <div className="flex flex-wrap gap-2">
+                  {/* Skills list with animated bars */}
+                  <div className="flex flex-col gap-4">
                     {group.skills.map((skill) => {
-                      const levelClass = LEVEL_STYLE[skill.level ?? "proficient"];
+                      const pct = LEVEL_PERCENTAGE[skill.level ?? "proficient"];
+
                       return (
-                        <span
-                          key={skill.name}
-                          className={`font-mono text-[11px] px-2.5 py-1 rounded-md border ${levelClass} leading-none`}
-                        >
-                          {skill.name}
-                        </span>
+                        <div key={skill.name} className="relative group/skill">
+                          <div className="flex justify-between items-end mb-1.5">
+                            <span className="font-mono text-[11px] text-text-secondary group-hover/skill:text-text-primary transition-colors">
+                              {skill.name}
+                            </span>
+                            <span
+                              className="font-mono text-[10px] opacity-0 group-hover/skill:opacity-100 transition-opacity"
+                              style={{ color: group.color }}
+                            >
+                              {pct}%
+                            </span>
+                          </div>
+                          <div className="h-1 w-full bg-border/40 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${pct}%` }}
+                              viewport={{ once: true, margin: "-50px" }}
+                              transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
+                              className="h-full rounded-full relative"
+                              style={{ backgroundColor: group.color }}
+                            >
+                              <div className="absolute inset-0 bg-white/20" />
+                            </motion.div>
+                          </div>
+                        </div>
                       );
                     })}
                   </div>
 
                   {/* Skill count */}
-                  <div className="mt-5 pt-4 border-t border-border/40 flex items-center gap-2">
+                  <div className="mt-8 pt-4 border-t border-border/40 flex items-center gap-2">
                     <div
                       className="w-1.5 h-1.5 rounded-full"
                       style={{ backgroundColor: group.color }}
@@ -134,20 +155,18 @@ export default function Skills() {
         </FadeInStagger>
 
         {/* Level legend */}
-        <FadeIn delay={0.15} className="mt-8">
-          <div className="flex flex-wrap gap-4 justify-end">
+        <FadeIn delay={0.15} className="mt-10">
+          <div className="flex flex-wrap gap-6 justify-end">
             {[
-              { level: "core",       label: "Core — daily use" },
-              { level: "proficient", label: "Proficient — regular use" },
-              { level: "familiar",   label: "Familiar — working knowledge" },
-            ].map(({ level, label }) => (
-              <div key={level} className="flex items-center gap-2">
-                <span
-                  className={`font-mono text-[10px] px-2 py-0.5 rounded border ${LEVEL_STYLE[level]}`}
-                >
-                  {level}
-                </span>
-                <span className="font-mono text-[10px] text-text-secondary/60">{label}</span>
+              { level: "core", label: "Core — daily use", pct: 95 },
+              { level: "proficient", label: "Proficient — regular use", pct: 80 },
+              { level: "familiar", label: "Familiar — working knowledge", pct: 60 },
+            ].map(({ level, label, pct }) => (
+              <div key={level} className="flex items-center gap-2.5">
+                <div className="w-8 h-1 bg-border/40 rounded-full overflow-hidden">
+                  <div className="h-full bg-text-secondary" style={{ width: `${pct}%` }} />
+                </div>
+                <span className="font-mono text-[10px] text-text-secondary/80">{label}</span>
               </div>
             ))}
           </div>

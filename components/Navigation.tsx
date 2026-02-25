@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { GithubIcon } from "./icons";
+import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
-  { label: "About",        href: "#about",        id: "about" },
-  { label: "Philosophy",   href: "#philosophy",   id: "philosophy" },
-  { label: "Projects",     href: "#projects",     id: "projects" },
-  { label: "Architecture", href: "#architecture", id: "architecture" },
-  { label: "Skills",       href: "#skills",       id: "skills" },
-  { label: "GitHub",       href: "#github",       id: "github" },
-  { label: "Contact",      href: "#contact",      id: "contact" },
+  { label: "About", href: "#about", id: "about" },
+  { label: "Philosophy", href: "#philosophy", id: "philosophy" },
+  { label: "Experience", href: "#experience", id: "experience" },
+  { label: "Projects", href: "#projects", id: "projects" },
+  { label: "Skills", href: "#skills", id: "skills" },
+  { label: "GitHub", href: "#github", id: "github" },
+  { label: "Contact", href: "#contact", id: "contact" },
 ];
 
 export default function Navigation() {
@@ -43,7 +44,18 @@ export default function Navigation() {
       if (e.key === "Escape" && menuOpen) setMenuOpen(false);
     };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+
+    // Prevent background scrolling when menu is open
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
   return (
@@ -52,11 +64,10 @@ export default function Navigation() {
       <div className="fixed top-0 left-0 right-0 z-[60] h-[2px] accent-line" />
 
       <header
-        className={`fixed top-[2px] left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-bg/90 backdrop-blur-md border-b border-border/60"
-            : "bg-transparent"
-        }`}
+        className={`fixed top-[2px] left-0 right-0 z-50 transition-all duration-300 ${scrolled
+          ? "bg-bg/90 backdrop-blur-md border-b border-border/60"
+          : "bg-transparent"
+          }`}
       >
         <div className="max-w-content mx-auto px-6 py-3.5 flex items-center justify-between">
           {/* Logo */}
@@ -75,11 +86,10 @@ export default function Navigation() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`nav-link text-[11px] transition-colors duration-200 tracking-wider uppercase font-mono ${
-                    isActive
-                      ? "text-accent"
-                      : "text-text-secondary hover:text-text-primary"
-                  }`}
+                  className={`nav-link text-[11px] transition-colors duration-200 tracking-wider uppercase font-mono ${isActive
+                    ? "text-accent"
+                    : "text-text-secondary hover:text-text-primary"
+                    }`}
                 >
                   {link.label}
                 </a>
@@ -87,16 +97,19 @@ export default function Navigation() {
             })}
           </nav>
 
-          {/* GitHub CTA */}
-          <a
-            href="https://github.com/scorpiocodex"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-1.5 text-[11px] font-mono font-medium text-accent border border-border px-3 py-1.5 rounded-lg hover:border-accent hover:bg-accent/5 transition-all duration-200"
-          >
-            <GithubIcon className="w-3.5 h-3.5" />
-            scorpiocodex
-          </a>
+          {/* Theme Toggle & GitHub CTA */}
+          <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
+            <a
+              href="https://github.com/scorpiocodex"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-[11px] font-mono font-medium text-accent border border-border px-3 py-1.5 rounded-lg hover:border-accent hover:bg-accent/5 transition-all duration-200"
+            >
+              <GithubIcon className="w-3.5 h-3.5" />
+              scorpiocodex
+            </a>
+          </div>
 
           {/* Mobile Hamburger */}
           <button
@@ -120,47 +133,71 @@ export default function Navigation() {
             />
           </button>
         </div>
+      </header>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {menuOpen && (
+      {/* Mobile Menu Drawer */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 bg-bg/60 backdrop-blur-sm z-30 md:hidden"
+              aria-hidden="true"
+            />
+
+            {/* Drawer */}
             <motion.div
               id="mobile-menu"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="md:hidden overflow-hidden bg-surface border-b border-border"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed top-0 right-0 bottom-0 w-[240px] bg-surface/95 backdrop-blur-xl border-l border-border z-40 md:hidden flex flex-col pt-24 shadow-2xl"
             >
-              <nav className="px-6 py-5 flex flex-col gap-4" aria-label="Mobile navigation">
-                {navLinks.map((link) => (
-                  <a
+              <nav className="flex-1 overflow-y-auto px-8 py-6 flex flex-col gap-6" aria-label="Mobile navigation">
+                {navLinks.map((link, i) => (
+                  <motion.a
                     key={link.label}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`text-sm transition-colors font-mono ${
-                      activeSection === link.id
-                        ? "text-accent"
-                        : "text-text-secondary hover:text-text-primary"
-                    }`}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
+                    className={`text-base tracking-wide transition-colors font-mono ${activeSection === link.id
+                      ? "text-accent"
+                      : "text-text-secondary hover:text-text-primary"
+                      }`}
                   >
                     {link.label}
-                  </a>
+                  </motion.a>
                 ))}
-                <a
-                  href="https://github.com/scorpiocodex"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-accent mt-1 font-mono"
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + navLinks.length * 0.05, duration: 0.3 }}
+                  className="mt-4 pt-6 flex flex-col gap-6 border-t border-border/50"
                 >
-                  <GithubIcon className="w-4 h-4" />
-                  scorpiocodex
-                </a>
+                  <ThemeToggle />
+                  <a
+                    href="https://github.com/scorpiocodex"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-sm text-accent font-mono w-max hover:text-accent-hover transition-colors"
+                  >
+                    <GithubIcon className="w-5 h-5" />
+                    scorpiocodex
+                  </a>
+                </motion.div>
               </nav>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }

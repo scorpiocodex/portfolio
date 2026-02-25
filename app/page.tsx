@@ -1,18 +1,20 @@
-import ScrollProgress from "@/components/ScrollProgress";
-import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
 import About from "@/components/About";
-import Philosophy from "@/components/Philosophy";
-import Projects from "@/components/Projects";
-import Architecture from "@/components/Architecture";
-import Skills from "@/components/Skills";
-import GitHub from "@/components/GitHub";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import GitHub from "@/components/GitHub";
+import Hero from "@/components/Hero";
+import Navigation from "@/components/Navigation";
+import Philosophy from "@/components/Philosophy";
+import Projects from "@/components/Projects";
+import ScrollProgress from "@/components/ScrollProgress";
+import Skills from "@/components/Skills";
+import Timeline from "@/components/Timeline";
+import { getGitHubData } from "@/lib/github";
 
-export default function Home() {
+export default async function Home() {
+  const githubData = await getGitHubData();
   return (
-    <main className="relative">
+    <main id="main-content" className="min-h-screen relative flex flex-col overflow-x-hidden">
       <ScrollProgress />
       <Navigation />
       <Hero />
@@ -21,13 +23,13 @@ export default function Home() {
       <div className="section-divider" />
       <Philosophy />
       <div className="section-divider" />
-      <Projects />
+      <Timeline />
       <div className="section-divider" />
-      <Architecture />
+      <Projects />
       <div className="section-divider" />
       <Skills />
       <div className="section-divider" />
-      <GitHub />
+      <GitHub data={githubData} />
       <div className="section-divider" />
       <Contact />
       <Footer />

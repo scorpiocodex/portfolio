@@ -1,7 +1,8 @@
 "use client";
 
-import { FadeIn, FadeInStagger, FadeInItem } from "./FadeIn";
-import { GithubIcon, LinkedInIcon, LocationIcon, EmailIcon, ExternalLinkIcon, PhoneIcon, DownloadIcon } from "./icons";
+import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
+import { DownloadIcon, EmailIcon, ExternalLinkIcon, GithubIcon, LinkedInIcon, LocationIcon, PhoneIcon } from "./icons";
+import Magnetic from "./Magnetic";
 
 const CONTACT_LINKS = [
   {
@@ -75,21 +76,25 @@ export default function Contact() {
                 tooling, or interesting IT projects — let&apos;s connect.
               </p>
               <div className="flex flex-wrap gap-3">
-                <a
-                  href="mailto:sanshibu2@gmail.com"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-bg text-sm font-semibold rounded-card hover:bg-glow transition-colors duration-200 font-inter"
-                >
-                  <EmailIcon className="w-4 h-4" />
-                  Send a message
-                </a>
-                <a
-                  href="/Resume.pdf"
-                  download="San_Shibu_Resume.pdf"
-                  className="inline-flex items-center gap-2 px-6 py-3 border border-border text-text-primary text-sm font-medium rounded-card hover:border-accent hover:text-accent transition-all duration-200 font-inter"
-                >
-                  <DownloadIcon className="w-4 h-4" />
-                  Resume
-                </a>
+                <Magnetic strength={20}>
+                  <a
+                    href="mailto:sanshibu2@gmail.com"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-bg text-sm font-semibold rounded-card hover:bg-glow transition-colors duration-200 font-inter"
+                  >
+                    <EmailIcon className="w-4 h-4" />
+                    Send a message
+                  </a>
+                </Magnetic>
+                <Magnetic strength={20}>
+                  <a
+                    href="/Resume.pdf"
+                    download="San_Shibu_Resume.pdf"
+                    className="inline-flex items-center gap-2 px-6 py-3 border border-border text-text-primary text-sm font-medium rounded-card hover:border-accent hover:text-accent transition-all duration-200 font-inter"
+                  >
+                    <DownloadIcon className="w-4 h-4" />
+                    Resume
+                  </a>
+                </Magnetic>
               </div>
             </div>
           </FadeIn>

@@ -1,8 +1,32 @@
+import CommandPalette from "@/components/CommandPalette";
+import CursorSpotlight from "@/components/CursorSpotlight";
+import EasterEgg from "@/components/EasterEgg";
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const baseUrl = "https://san-shibu.vercel.app";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "San Shibu",
+  url: baseUrl,
+  jobTitle: "Full-Stack Developer",
+  sameAs: [
+    "https://github.com/scorpiocodex",
+    "https://linkedin.com/in/sanshibu"
+  ],
+  knowsAbout: [
+    "Software Engineering",
+    "Full-Stack Web Development",
+    "System Architecture",
+    "React",
+    "Next.js",
+    "Python",
+    "Node.js",
+  ]
+};
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -77,9 +101,33 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}
+      suppressHydrationWarning
     >
-      <body className="bg-bg text-text-primary font-inter antialiased">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.getItem('theme') === 'deep-ocean') {
+                  document.documentElement.setAttribute('data-theme', 'deep-ocean');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className="bg-bg text-text-primary font-inter antialiased overflow-x-hidden">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] bg-surface border border-border px-4 py-2 rounded-lg font-mono text-sm text-accent transition-all">
+          Skip to content
+        </a>
+        <CursorSpotlight />
         {children}
+        <CommandPalette />
+        <EasterEgg />
       </body>
     </html>
   );

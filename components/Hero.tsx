@@ -1,8 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { GithubIcon, DownloadIcon } from "./icons";
+import Constellation from "./Constellation";
+import Magnetic from "./Magnetic";
+import { DownloadIcon, GithubIcon } from "./icons";
 
 interface TerminalLine {
   text: string;
@@ -22,8 +25,8 @@ const TERMINAL_LINES: TerminalLine[] = [
 const lineColorClass: Record<TerminalLine["type"], string> = {
   command: "text-text-primary",
   success: "text-success",
-  info:    "text-accent",
-  dim:     "text-text-secondary",
+  info: "text-accent",
+  dim: "text-text-secondary",
 };
 
 function msDelay(ms: number): Promise<void> {
@@ -78,6 +81,8 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
+      <Constellation />
+
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none select-none">
         <div className="absolute top-[20%] right-[25%] w-[500px] h-[500px] rounded-full bg-accent/[0.04] blur-[100px]" />
@@ -93,21 +98,40 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* Status chip */}
-            <div className="flex items-center gap-2.5 mb-7">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-60" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
-              </span>
-              <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase">
-                Full-Stack Developer · Open to Work
-              </span>
+            {/* Avatar & Status chip */}
+            <div className="flex items-center gap-4 mb-7">
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-full border border-border/80 overflow-hidden bg-surface p-0.5 card-glow">
+                <div className="relative w-full h-full rounded-full overflow-hidden bg-[#0D1117]">
+                  <Image
+                    src="/avatar.png"
+                    alt="San Shibu Avatar"
+                    fill
+                    className="object-cover scale-110"
+                    priority
+                  />
+                  <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-full pointer-events-none" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2.5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-60" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
+                  </span>
+                  <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase">
+                    Full-Stack Developer
+                  </span>
+                </div>
+                <div className="font-mono text-[11px] text-text-secondary/70 tracking-[0.18em] uppercase ml-[18px]">
+                  Open to Work
+                </div>
+              </div>
             </div>
 
             {/* Headline */}
-            <h1 className="font-space-grotesk text-[2.6rem] sm:text-[3.2rem] lg:text-[3.6rem] xl:text-[4rem] font-bold text-text-primary leading-[1.04] tracking-tight mb-7">
+            <h1 className="font-space-grotesk text-[2rem] sm:text-[2.6rem] md:text-[3.2rem] lg:text-[3.6rem] xl:text-[4rem] font-bold text-text-primary leading-[1.08] tracking-tight mb-7">
               Building{" "}
-              <span className="text-accent">Full-Stack</span>
+              <span className="gradient-text-animated pb-1">Full-Stack</span>
               <br className="hidden sm:block" />
               {" "}Apps & Dev Tools.
             </h1>
@@ -123,35 +147,43 @@ export default function Hero() {
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-3">
-              <a
-                href="#projects"
-                className="px-5 py-2.5 bg-accent text-bg text-sm font-semibold rounded-card hover:bg-glow transition-colors duration-200 font-inter"
-              >
-                View Projects
-              </a>
-              <a
-                href="https://github.com/scorpiocodex"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-2.5 border border-border text-text-primary text-sm font-medium rounded-card hover:border-accent hover:text-accent transition-all duration-200 font-inter"
-              >
-                <GithubIcon className="w-4 h-4" />
-                GitHub
-              </a>
-              <a
-                href="#contact"
-                className="px-5 py-2.5 border border-border text-text-secondary text-sm font-medium rounded-card hover:text-text-primary hover:border-accent/40 transition-all duration-200 font-inter"
-              >
-                Contact
-              </a>
-              <a
-                href="/Resume.pdf"
-                download="San_Shibu_Resume.pdf"
-                className="flex items-center gap-2 px-5 py-2.5 border border-border text-text-secondary text-sm font-medium rounded-card hover:text-text-primary hover:border-accent/40 transition-all duration-200 font-inter"
-              >
-                <DownloadIcon className="w-4 h-4" />
-                Resume
-              </a>
+              <Magnetic strength={25}>
+                <a
+                  href="#projects"
+                  className="block px-5 py-2.5 bg-accent text-bg text-sm font-semibold rounded-card hover:bg-glow transition-colors duration-200 font-inter"
+                >
+                  View Projects
+                </a>
+              </Magnetic>
+              <Magnetic strength={20}>
+                <a
+                  href="https://github.com/scorpiocodex"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-5 py-2.5 border border-border text-text-primary text-sm font-medium rounded-card hover:border-accent hover:text-accent transition-all duration-200 font-inter"
+                >
+                  <GithubIcon className="w-4 h-4" />
+                  GitHub
+                </a>
+              </Magnetic>
+              <Magnetic strength={20}>
+                <a
+                  href="#contact"
+                  className="block px-5 py-2.5 border border-border text-text-secondary text-sm font-medium rounded-card hover:text-text-primary hover:border-accent/40 transition-all duration-200 font-inter"
+                >
+                  Contact
+                </a>
+              </Magnetic>
+              <Magnetic strength={20}>
+                <a
+                  href="/Resume.pdf"
+                  download="San_Shibu_Resume.pdf"
+                  className="flex items-center gap-2 px-5 py-2.5 border border-border text-text-secondary text-sm font-medium rounded-card hover:text-text-primary hover:border-accent/40 transition-all duration-200 font-inter"
+                >
+                  <DownloadIcon className="w-4 h-4" />
+                  Resume
+                </a>
+              </Magnetic>
             </div>
           </motion.div>
 
@@ -181,7 +213,7 @@ export default function Hero() {
                 </div>
 
                 {/* Terminal body */}
-                <div className="px-5 pt-5 pb-6 font-mono text-[13px] leading-[1.85] min-h-[240px]">
+                <div className="px-3 sm:px-5 pt-5 pb-6 font-mono text-[11px] sm:text-[13px] leading-[1.85] min-h-[200px] sm:min-h-[240px] overflow-x-auto">
                   {/* Path prompt */}
                   <div className="text-text-secondary/40 text-[11px] mb-3 select-none">
                     san@scorpiocodex:~/projects/watchflow

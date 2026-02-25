@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { FadeIn, FadeInStagger, FadeInItem } from "./FadeIn";
+import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
+import { MouseEvent, useRef } from "react";
+import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 import { GithubIcon } from "./icons";
 
 interface Project {
@@ -99,7 +100,7 @@ export default function Projects() {
         {/* Header */}
         <FadeIn className="mb-16">
           <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase block mb-3">
-            03 — Projects
+            04 — Projects
           </span>
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
             Systems Built
@@ -111,7 +112,7 @@ export default function Projects() {
 
         {/* Project cards */}
         <FadeInStagger staggerDelay={0.1}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5">
             {PROJECTS.map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}
@@ -123,15 +124,56 @@ export default function Projects() {
 }
 
 function ProjectCard({ project }: { project: Project }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useSpring(useMotionValue(0), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useMotionValue(0), { stiffness: 300, damping: 30 });
+
+  function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const localX = e.clientX - rect.left;
+    const localY = e.clientY - rect.top;
+
+    mouseX.set(localX);
+    mouseY.set(localY);
+
+    const xPct = localX / width - 0.5;
+    const yPct = localY / height - 0.5;
+
+    // Subtle 3D tilt
+    rotateX.set(-yPct * 8);
+    rotateY.set(xPct * 8);
+  }
+
+  function handleMouseLeave() {
+    rotateX.set(0);
+    rotateY.set(0);
+  }
+
   return (
-    <FadeInItem>
+    <FadeInItem className="h-full perspective-1000">
       <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
         whileHover={{
           borderColor: `${project.accentColor}66`,
           boxShadow: `0 0 0 1px ${project.accentColor}22, 0 8px 48px ${project.accentColor}18`,
+          y: -4,
         }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="group relative h-full flex flex-col p-6 rounded-card border border-border bg-surface/50 cursor-default overflow-hidden"
+        className="group relative h-full flex flex-col p-6 rounded-card border border-border bg-surface/50 cursor-default overflow-hidden will-change-transform"
       >
         {/* Top accent line on hover */}
         <div
@@ -139,11 +181,11 @@ function ProjectCard({ project }: { project: Project }) {
           style={{ background: project.accentColor }}
         />
 
-        {/* Radial glow on hover */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-card"
+        {/* Dynamic spotlight on hover */}
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-card"
           style={{
-            background: `radial-gradient(600px at 50% -20%, ${project.accentColor}08, transparent 70%)`,
+            background: useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, ${project.accentColor}18, transparent 80%)`,
           }}
         />
 

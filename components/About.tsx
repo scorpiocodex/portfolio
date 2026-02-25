@@ -1,6 +1,6 @@
 "use client";
 
-import { FadeIn, FadeInStagger, FadeInItem } from "./FadeIn";
+import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 
 const focusAreas = [
   {
@@ -32,7 +32,7 @@ const focusAreas = [
 
 export default function About() {
   return (
-    <section id="about" className="py-24 lg:py-32">
+    <section id="about" className="py-24 lg:py-32 relative z-10 bg-bg">
       <div className="max-w-content mx-auto px-6">
 
         {/* Section header */}
