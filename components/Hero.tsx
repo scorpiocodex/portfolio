@@ -1,5 +1,6 @@
 "use client";
 
+import { RESUME, SOCIAL } from "@/lib/constants";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -104,7 +105,7 @@ export default function Hero() {
                 <div className="relative w-full h-full rounded-full overflow-hidden bg-[#0D1117]">
                   <Image
                     src="/avatar.png"
-                    alt="San Shibu Avatar"
+                    alt="San Shibu — Full-Stack Developer avatar"
                     fill
                     className="object-cover scale-110"
                     priority
@@ -157,9 +158,10 @@ export default function Hero() {
               </Magnetic>
               <Magnetic strength={20}>
                 <a
-                  href="https://github.com/scorpiocodex"
+                  href={SOCIAL.github.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="View GitHub profile"
                   className="flex items-center gap-2 px-5 py-2.5 border border-border text-text-primary text-sm font-medium rounded-card hover:border-accent hover:text-accent transition-all duration-200 font-inter"
                 >
                   <GithubIcon className="w-4 h-4" />
@@ -176,8 +178,9 @@ export default function Hero() {
               </Magnetic>
               <Magnetic strength={20}>
                 <a
-                  href="/Resume.pdf"
-                  download="San_Shibu_Resume.pdf"
+                  href={RESUME.href}
+                  download={RESUME.downloadName}
+                  aria-label="Download resume"
                   className="flex items-center gap-2 px-5 py-2.5 border border-border text-text-secondary text-sm font-medium rounded-card hover:text-text-primary hover:border-accent/40 transition-all duration-200 font-inter"
                 >
                   <DownloadIcon className="w-4 h-4" />

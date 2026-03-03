@@ -1,22 +1,18 @@
 import CommandPalette from "@/components/CommandPalette";
 import CursorSpotlight from "@/components/CursorSpotlight";
 import EasterEgg from "@/components/EasterEgg";
+import { KEYWORDS, SITE, SOCIAL } from "@/lib/constants";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const baseUrl = "https://san-shibu.vercel.app";
-
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "San Shibu",
-  url: baseUrl,
+  name: SITE.name,
+  url: SITE.url,
   jobTitle: "Full-Stack Developer",
-  sameAs: [
-    "https://github.com/scorpiocodex",
-    "https://linkedin.com/in/sanshibu"
-  ],
+  sameAs: [SOCIAL.github.url, SOCIAL.linkedin.url],
   knowsAbout: [
     "Software Engineering",
     "Full-Stack Web Development",
@@ -25,7 +21,7 @@ const jsonLd = {
     "Next.js",
     "Python",
     "Node.js",
-  ]
+  ],
 };
 
 const spaceGrotesk = Space_Grotesk({
@@ -50,41 +46,26 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
-  title: "San Shibu — Full-Stack Developer | IT Professional",
-  description:
-    "San Shibu is an IT graduate from Victoria University building full-stack web applications, developer tooling, and automation systems using React, Node.js, and Python.",
-  keywords: [
-    "Full-stack developer",
-    "React developer",
-    "Node.js",
-    "Python developer",
-    "IT professional",
-    "web developer",
-    "Watchflow",
-    "scorpiocodex",
-    "Scaler Academy",
-    "San Shibu",
-    "Kerala developer",
-  ],
-  authors: [{ name: "San Shibu", url: "https://github.com/scorpiocodex" }],
-  creator: "San Shibu",
+  metadataBase: new URL(SITE.url),
+  title: SITE.title,
+  description: SITE.description,
+  keywords: [...KEYWORDS],
+  authors: [{ name: SITE.name, url: SOCIAL.github.url }],
+  creator: SITE.name,
   openGraph: {
-    title: "San Shibu — Full-Stack Developer | IT Professional",
-    description:
-      "San Shibu is an IT graduate from Victoria University building full-stack web applications, developer tooling, and automation systems using React, Node.js, and Python.",
-    url: baseUrl,
-    siteName: "San Shibu — Portfolio",
+    title: SITE.title,
+    description: SITE.description,
+    url: SITE.url,
+    siteName: `${SITE.name} — Portfolio`,
     type: "website",
-    locale: "en_US",
+    locale: SITE.locale,
   },
   twitter: {
     card: "summary_large_image",
-    title: "San Shibu — Full-Stack Developer | IT Professional",
-    description:
-      "San Shibu is an IT graduate from Victoria University building full-stack web applications, developer tooling, and automation systems using React, Node.js, and Python.",
-    creator: "@sanshibu2",
-    site: "@sanshibu2",
+    title: SITE.title,
+    description: SITE.description,
+    creator: SOCIAL.twitter,
+    site: SOCIAL.twitter,
   },
   robots: {
     index: true,
@@ -104,6 +85,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Preconnect to external origins */}
+        <link rel="preconnect" href="https://api.github.com" />
+        <link rel="preconnect" href="https://avatars.githubusercontent.com" />
+        <link rel="dns-prefetch" href="https://api.github.com" />
+        <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />
+
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -121,7 +108,10 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-bg text-text-primary font-inter antialiased overflow-x-hidden">
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] bg-surface border border-border px-4 py-2 rounded-lg font-mono text-sm text-accent transition-all">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] bg-surface border border-border px-4 py-2 rounded-lg font-mono text-sm text-accent transition-all"
+        >
           Skip to content
         </a>
         <CursorSpotlight />

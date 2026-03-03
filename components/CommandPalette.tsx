@@ -1,5 +1,6 @@
 "use client";
 
+import { RESUME, SOCIAL } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { DownloadIcon, EmailIcon, GithubIcon } from "./icons";
@@ -48,19 +49,19 @@ export default function CommandPalette() {
         {
             id: "action-resume", name: "Download Resume", category: "Actions", icon: <DownloadIcon className="w-3.5 h-3.5" />, action: () => {
                 const a = document.createElement("a");
-                a.href = "/Resume.pdf";
-                a.download = "San_Shibu_Resume.pdf";
+                a.href = RESUME.href;
+                a.download = RESUME.downloadName;
                 a.click();
             }
         },
         {
             id: "action-email", name: "Send Email", category: "Actions", icon: <EmailIcon className="w-3.5 h-3.5" />, action: () => {
-                window.location.href = "mailto:sanshibu2@gmail.com";
+                window.location.href = `mailto:${SOCIAL.email}`;
             }
         },
         {
             id: "action-github", name: "Open GitHub Profile", category: "Actions", icon: <GithubIcon className="w-3.5 h-3.5" />, action: () => {
-                window.open("https://github.com/scorpiocodex", "_blank");
+                window.open(SOCIAL.github.url, "_blank");
             }
         },
 

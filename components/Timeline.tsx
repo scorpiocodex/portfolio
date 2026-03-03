@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 
 const TIMELINE_DATA = [
@@ -35,9 +36,7 @@ export default function Timeline() {
         <section id="experience" className="py-24 lg:py-32">
             <div className="max-w-content mx-auto px-6" ref={containerRef}>
                 <FadeIn className="mb-20">
-                    <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase block mb-3">
-                        03 — Experience
-                    </span>
+                    <AnimatedSectionNumber number="03" label="Experience" />
                     <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
                         Education & Journey
                     </h2>

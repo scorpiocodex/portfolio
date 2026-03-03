@@ -1,19 +1,12 @@
 "use client";
 
+import { NAV_LINKS, SOCIAL } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { GithubIcon } from "./icons";
 import ThemeToggle from "./ThemeToggle";
 
-const navLinks = [
-  { label: "About", href: "#about", id: "about" },
-  { label: "Philosophy", href: "#philosophy", id: "philosophy" },
-  { label: "Experience", href: "#experience", id: "experience" },
-  { label: "Projects", href: "#projects", id: "projects" },
-  { label: "Skills", href: "#skills", id: "skills" },
-  { label: "GitHub", href: "#github", id: "github" },
-  { label: "Contact", href: "#contact", id: "contact" },
-];
+const navLinks = NAV_LINKS;
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -25,7 +18,7 @@ export default function Navigation() {
       setScrolled(window.scrollY > 24);
 
       let current = "";
-      for (const link of navLinks) {
+      for (const link of [...navLinks]) {
         const el = document.getElementById(link.id);
         if (el && el.getBoundingClientRect().top <= 100) {
           current = link.id;
@@ -101,13 +94,14 @@ export default function Navigation() {
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
             <a
-              href="https://github.com/scorpiocodex"
+              href={SOCIAL.github.url}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="GitHub profile"
               className="flex items-center gap-1.5 text-[11px] font-mono font-medium text-accent border border-border px-3 py-1.5 rounded-lg hover:border-accent hover:bg-accent/5 transition-all duration-200"
             >
               <GithubIcon className="w-3.5 h-3.5" />
-              scorpiocodex
+              {SOCIAL.github.username}
             </a>
           </div>
 
@@ -182,16 +176,23 @@ export default function Navigation() {
                   transition={{ delay: 0.1 + navLinks.length * 0.05, duration: 0.3 }}
                   className="mt-4 pt-6 flex flex-col gap-6 border-t border-border/50"
                 >
-                  <ThemeToggle />
+                  <div className="flex items-center gap-3">
+                    <ThemeToggle />
+                    <span className="font-mono text-[11px] text-text-secondary">Theme</span>
+                  </div>
                   <a
-                    href="https://github.com/scorpiocodex"
+                    href={SOCIAL.github.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 text-sm text-accent font-mono w-max hover:text-accent-hover transition-colors"
                   >
                     <GithubIcon className="w-5 h-5" />
-                    scorpiocodex
+                    {SOCIAL.github.username}
                   </a>
+                  <div className="flex items-center gap-2 mt-2 opacity-50">
+                    <kbd className="font-mono text-[10px] border border-border rounded px-1.5 py-0.5 bg-surface text-text-secondary">⌘K</kbd>
+                    <span className="font-mono text-[10px] text-text-secondary">Quick search</span>
+                  </div>
                 </motion.div>
               </nav>
             </motion.div>

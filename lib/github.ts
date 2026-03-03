@@ -1,3 +1,5 @@
+import { SOCIAL } from "./constants";
+
 export interface Repo {
   name: string;
   description: string;
@@ -8,12 +10,14 @@ export interface Repo {
   accent: string;
 }
 
+export interface ContributionDay {
+  color: string;
+  contributionCount: number;
+  date: string;
+}
+
 export interface ContributionWeek {
-  contributionDays: {
-    color: string;
-    contributionCount: number;
-    date: string;
-  }[];
+  contributionDays: ContributionDay[];
 }
 
 export interface GitHubData {
@@ -27,12 +31,47 @@ export interface GitHubData {
   contributions: ContributionWeek[];
 }
 
+/* ─── Typed GraphQL response ──────────────────────────────────────────── */
+interface GitHubGraphQLRepo {
+  name: string;
+  description: string | null;
+  url: string;
+  stargazerCount: number;
+  primaryLanguage: {
+    name: string;
+    color: string;
+  } | null;
+}
+
+interface GitHubGraphQLUser {
+  name: string | null;
+  login: string;
+  avatarUrl: string;
+  url: string;
+  pinnedItems: {
+    nodes: GitHubGraphQLRepo[];
+  };
+  contributionsCollection: {
+    contributionCalendar: {
+      weeks: ContributionWeek[];
+    };
+  };
+}
+
+interface GitHubGraphQLResponse {
+  data?: {
+    user?: GitHubGraphQLUser;
+  };
+  errors?: { message: string }[];
+}
+
+/* ─── Static fallback ─────────────────────────────────────────────────── */
 const STATIC_FALLBACK: GitHubData = {
   user: {
     name: "San Shibu",
-    login: "scorpiocodex",
-    avatarUrl: "https://avatars.githubusercontent.com/u/212041449?v=4",
-    url: "https://github.com/scorpiocodex",
+    login: SOCIAL.github.username,
+    avatarUrl: SOCIAL.github.avatarUrl,
+    url: SOCIAL.github.url,
   },
   repos: [
     {
@@ -79,7 +118,7 @@ function generateMockContributions() {
   const weeks: ContributionWeek[] = [];
   const colors = ["#161B22", "#0E4429", "#006D32", "#26A641", "#39D353"];
   for (let w = 0; w < 26; w++) {
-    const days = [];
+    const days: ContributionDay[] = [];
     for (let d = 0; d < 7; d++) {
       const seed = w * 7 + d;
       const pseudo = ((seed * 1103515245 + 12345) & 0x7fffffff) % 100;
@@ -95,9 +134,10 @@ function generateMockContributions() {
   return weeks;
 }
 
+/* ─── Data fetcher ────────────────────────────────────────────────────── */
 export async function getGitHubData(): Promise<GitHubData> {
   const token = process.env.GITHUB_PAT;
-  const username = "scorpiocodex";
+  const username = SOCIAL.github.username;
 
   if (!token) {
     console.log("No GITHUB_PAT found. Falling back to static data.");
@@ -151,24 +191,23 @@ export async function getGitHubData(): Promise<GitHubData> {
         query,
         variables: { username },
       }),
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
       throw new Error(`GitHub API returned ${res.status}`);
     }
 
-    const { data, errors } = await res.json();
+    const json: GitHubGraphQLResponse = await res.json();
 
-    if (errors || !data?.user) {
-      throw new Error(errors?.[0]?.message || "Failed to fetch GitHub data");
+    if (json.errors || !json.data?.user) {
+      throw new Error(json.errors?.[0]?.message || "Failed to fetch GitHub data");
     }
 
-    const user = data.user;
-
+    const user = json.data.user;
     const colorsList = ["#58A6FF", "#7C3AED", "#00E5FF", "#3FB950", "#E34C26", "#F05133"];
 
-    const repos: Repo[] = user.pinnedItems.nodes.map((repo: any, index: number) => ({
+    const repos: Repo[] = user.pinnedItems.nodes.map((repo, index) => ({
       name: repo.name,
       description: repo.description || "",
       language: repo.primaryLanguage?.name || "Unknown",
@@ -178,7 +217,6 @@ export async function getGitHubData(): Promise<GitHubData> {
       accent: colorsList[index % colorsList.length],
     }));
 
-    // Only take the last 26 weeks for a half-year view
     const allWeeks = user.contributionsCollection.contributionCalendar.weeks;
     const recentWeeks = allWeeks.slice(-26);
 

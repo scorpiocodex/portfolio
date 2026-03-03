@@ -2,6 +2,7 @@
 
 import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 import { MouseEvent, useRef } from "react";
+import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 import { GithubIcon } from "./icons";
 
@@ -99,9 +100,7 @@ export default function Projects() {
 
         {/* Header */}
         <FadeIn className="mb-16">
-          <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase block mb-3">
-            04 — Projects
-          </span>
+          <AnimatedSectionNumber number="04" label="Projects" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
             Systems Built
           </h2>

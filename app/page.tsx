@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import GitHub from "@/components/GitHub";
 import Hero from "@/components/Hero";
 import Navigation from "@/components/Navigation";
+import PageReveal from "@/components/PageReveal";
 import Philosophy from "@/components/Philosophy";
 import Projects from "@/components/Projects";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -17,22 +18,24 @@ export default async function Home() {
     <main id="main-content" className="min-h-screen relative flex flex-col overflow-x-hidden">
       <ScrollProgress />
       <Navigation />
-      <Hero />
-      <div className="section-divider" />
-      <About />
-      <div className="section-divider" />
-      <Philosophy />
-      <div className="section-divider" />
-      <Timeline />
-      <div className="section-divider" />
-      <Projects />
-      <div className="section-divider" />
-      <Skills />
-      <div className="section-divider" />
-      <GitHub data={githubData} />
-      <div className="section-divider" />
-      <Contact />
-      <Footer />
+      <PageReveal>
+        <Hero />
+        <div className="section-divider" />
+        <About />
+        <div className="section-divider" />
+        <Philosophy />
+        <div className="section-divider" />
+        <Timeline />
+        <div className="section-divider" />
+        <Projects />
+        <div className="section-divider" />
+        <Skills />
+        <div className="section-divider" />
+        <GitHub data={githubData} />
+        <div className="section-divider" />
+        <Contact />
+        <Footer />
+      </PageReveal>
     </main>
   );
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { RESUME, SOCIAL } from "@/lib/constants";
+import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 import { DownloadIcon, EmailIcon, ExternalLinkIcon, GithubIcon, LinkedInIcon, LocationIcon, PhoneIcon } from "./icons";
 import Magnetic from "./Magnetic";
@@ -7,39 +9,39 @@ import Magnetic from "./Magnetic";
 const CONTACT_LINKS = [
   {
     label: "Email",
-    value: "sanshibu2@gmail.com",
-    href: "mailto:sanshibu2@gmail.com",
+    value: SOCIAL.email,
+    href: `mailto:${SOCIAL.email}`,
     icon: <EmailIcon className="w-4 h-4" />,
     color: "#58A6FF",
     external: false,
   },
   {
     label: "GitHub",
-    value: "scorpiocodex",
-    href: "https://github.com/scorpiocodex",
+    value: SOCIAL.github.username,
+    href: SOCIAL.github.url,
     icon: <GithubIcon className="w-4 h-4" />,
     color: "#E6EDF3",
     external: true,
   },
   {
     label: "LinkedIn",
-    value: "San Shibu",
-    href: "https://www.linkedin.com/in/san-shibu-8250a9178/",
+    value: SOCIAL.linkedin.name,
+    href: SOCIAL.linkedin.url,
     icon: <LinkedInIcon className="w-4 h-4" />,
     color: "#0A66C2",
     external: true,
   },
   {
     label: "Phone",
-    value: "+91 9605770221",
-    href: "tel:+919605770221",
+    value: SOCIAL.phone,
+    href: SOCIAL.phoneHref,
     icon: <PhoneIcon className="w-4 h-4" />,
     color: "#3FB950",
     external: false,
   },
   {
     label: "Location",
-    value: "Ernakulam, Kerala, India",
+    value: SOCIAL.location,
     href: null,
     icon: <LocationIcon className="w-4 h-4" />,
     color: "#8B949E",
@@ -54,9 +56,7 @@ export default function Contact() {
 
         {/* Header */}
         <FadeIn className="mb-16">
-          <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase block mb-3">
-            07 — Contact
-          </span>
+          <AnimatedSectionNumber number="07" label="Contact" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
             Get in Touch
           </h2>
@@ -78,7 +78,8 @@ export default function Contact() {
               <div className="flex flex-wrap gap-3">
                 <Magnetic strength={20}>
                   <a
-                    href="mailto:sanshibu2@gmail.com"
+                    href={`mailto:${SOCIAL.email}`}
+                    aria-label="Send an email"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-bg text-sm font-semibold rounded-card hover:bg-glow transition-colors duration-200 font-inter"
                   >
                     <EmailIcon className="w-4 h-4" />
@@ -87,8 +88,9 @@ export default function Contact() {
                 </Magnetic>
                 <Magnetic strength={20}>
                   <a
-                    href="/Resume.pdf"
-                    download="San_Shibu_Resume.pdf"
+                    href={RESUME.href}
+                    download={RESUME.downloadName}
+                    aria-label="Download resume"
                     className="inline-flex items-center gap-2 px-6 py-3 border border-border text-text-primary text-sm font-medium rounded-card hover:border-accent hover:text-accent transition-all duration-200 font-inter"
                   >
                     <DownloadIcon className="w-4 h-4" />

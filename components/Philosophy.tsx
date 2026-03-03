@@ -1,6 +1,7 @@
 "use client";
 
-import { FadeIn, FadeInStagger, FadeInItem } from "./FadeIn";
+import { AnimatedSectionNumber } from "./AnimatedElements";
+import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 
 const philosophies = [
   {
@@ -41,10 +42,8 @@ export default function Philosophy() {
       <div className="max-w-content mx-auto px-6">
 
         {/* Header */}
-        <FadeIn className="mb-16">
-          <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase block mb-3">
-            02 — Philosophy
-          </span>
+        <FadeIn className="mb-14">
+          <AnimatedSectionNumber number="02" label="Philosophy" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
             Engineering Principles
           </h2>

@@ -1,4 +1,6 @@
 import { ContributionWeek, GitHubData } from "@/lib/github";
+import Image from "next/image";
+import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 import { ExternalLinkIcon, GithubIcon, StarIcon } from "./icons";
 
@@ -11,9 +13,7 @@ export default function GitHub({ data }: { data: GitHubData }) {
 
         {/* Header */}
         <FadeIn className="mb-16">
-          <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase block mb-3">
-            06 — Open Source
-          </span>
+          <AnimatedSectionNumber number="06" label="Open Source" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
             On GitHub
           </h2>
@@ -24,8 +24,13 @@ export default function GitHub({ data }: { data: GitHubData }) {
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 sm:p-5 rounded-card border border-border bg-surface/40 max-w-md">
             <div className="w-12 h-12 rounded-full bg-surface-2 border border-border flex items-center justify-center shrink-0 overflow-hidden">
               {user.avatarUrl ? (
-                // Using standard img tag instead of next/image here since GitHub hosts the images
-                <img src={user.avatarUrl} alt={user.login} className="w-full h-full object-cover" />
+                <Image
+                  src={user.avatarUrl}
+                  alt={`${user.name || user.login}'s GitHub profile picture`}
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <GithubIcon className="w-6 h-6 text-text-secondary" />
               )}

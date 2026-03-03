@@ -11,6 +11,7 @@ Personal portfolio website for **San Shibu**, Full-Stack & Systems Developer.
 
 ## Featured Projects
 
+Production-grade Python CLI tools — from pipeline automation to zero-knowledge cryptographic vaults.
 - [Watchflow](https://github.com/scorpiocodex/Watchflow) — Python pipeline automation CLI with YAML/NLP intents and daemon orchestration
 - [Termbackup](https://github.com/scorpiocodex/Termbackup) — Zero-knowledge terminal backup via GitHub API with cryptographic security
 - [Fluxion](https://github.com/scorpiocodex/Fluxion) — Network CLI accelerator supporting HTTP/2, HTTP/3 QUIC, FTP, SFTP, SCP and TLS inspection

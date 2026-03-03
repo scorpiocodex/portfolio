@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatedCounter, AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 
 const focusAreas = [
@@ -37,11 +38,9 @@ export default function About() {
 
         {/* Section header */}
         <FadeIn className="mb-16">
-          <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase block mb-3">
-            01 — About
-          </span>
+          <AnimatedSectionNumber number="01" label="About" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
-            The Developer
+            Who I Am
           </h2>
         </FadeIn>
 
@@ -75,6 +74,27 @@ export default function About() {
                     {stat.value}
                   </div>
                   <div className="font-mono text-[11px] text-text-secondary tracking-wide">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Animated stats */}
+            <div className="flex flex-wrap gap-10 mt-8 pt-8 border-t border-border/50">
+              {[
+                { value: 4, suffix: "+", label: "Projects Built" },
+                { value: 17, suffix: "+", label: "Technologies" },
+                { value: 400, suffix: "+", label: "Contributions" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <AnimatedCounter
+                    value={stat.value}
+                    suffix={stat.suffix}
+                    className="font-space-grotesk text-2xl font-bold text-text-primary"
+                    duration={1.8}
+                  />
+                  <div className="font-mono text-[10px] text-text-secondary/70 tracking-wider mt-1 uppercase">
                     {stat.label}
                   </div>
                 </div>
