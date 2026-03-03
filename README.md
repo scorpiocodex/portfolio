@@ -14,7 +14,7 @@ Personal portfolio website for **San Shibu**, Full-Stack & Systems Developer.
 - [Watchflow](https://github.com/scorpiocodex/Watchflow) — Python pipeline automation CLI with YAML/NLP intents and daemon orchestration
 - [Termbackup](https://github.com/scorpiocodex/Termbackup) — Zero-knowledge terminal backup via GitHub API with cryptographic security
 - [Fluxion](https://github.com/scorpiocodex/Fluxion) — Network CLI accelerator supporting HTTP/2, HTTP/3 QUIC, FTP, SFTP, SCP and TLS inspection
-- [Tasklite](https://github.com/scorpiocodex/Tasklite) — Full-stack todo app (Node.js/Express + Vanilla JS) with optimistic UI and dark mode
+- [Nyxora](https://github.com/scorpiocodex/Nyxora) — Terminal-native, zero-knowledge cryptographic password vault with Argon2id + XChaCha20-Poly1305 encryption
 
 ## Getting Started
 
