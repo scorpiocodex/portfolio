@@ -1,97 +1,13 @@
 "use client";
 
+import type { ProjectData } from "@/lib/projects";
+import { PROJECTS } from "@/lib/projects";
 import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
+import Link from "next/link";
 import { MouseEvent, useRef } from "react";
 import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 import { GithubIcon } from "./icons";
-
-interface Project {
-  slug: string;
-  name: string;
-  tagline: string;
-  description: string;
-  features: string[];
-  tech: string[];
-  github: string;
-  accentColor: string;
-  number: string;
-}
-
-const PROJECTS: Project[] = [
-  {
-    slug: "watchflow",
-    name: "Watchflow",
-    number: "01",
-    tagline: "Pipeline Automation CLI",
-    description:
-      "Next-generation pipeline automation CLI. Define NLP intents in YAML to instantly trigger topological shell workflows on file changes. Includes built-in daemon orchestration, dry-run simulation, and cross-session analytics.",
-    features: [
-      "YAML-defined NLP intent triggers",
-      "Topological shell workflow execution",
-      "Built-in daemon orchestration",
-      "Dry-run simulation mode",
-      "Cross-session analytics",
-    ],
-    tech: ["Python", "YAML", "Shell", "Watchdog"],
-    github: "https://github.com/scorpiocodex/Watchflow",
-    accentColor: "#58A6FF",
-  },
-  {
-    slug: "termbackup",
-    name: "Termbackup",
-    number: "02",
-    tagline: "Zero-Knowledge Backup System",
-    description:
-      "Advanced zero-knowledge backup architecture interfacing directly with the GitHub API. Engineered with mathematically enforced security, automated snapshot logic, and next-generation terminal UI paradigms.",
-    features: [
-      "Zero-knowledge backup architecture",
-      "Direct GitHub API integration",
-      "Mathematically enforced security",
-      "Automated directory snapshots",
-      "File validation and restore",
-    ],
-    tech: ["Python", "GitHub API", "Cryptography", "CLI"],
-    github: "https://github.com/scorpiocodex/Termbackup",
-    accentColor: "#7C3AED",
-  },
-  {
-    slug: "fluxion",
-    name: "Fluxion",
-    number: "03",
-    tagline: "Intelligent Network Command Engine",
-    description:
-      "Next-gen CLI download accelerator with adaptive parallel transport, real-time network telemetry, and TLS deep inspection. Multi-protocol support across HTTP/2, HTTP/3 QUIC, FTP, SFTP, and SCP. Built for speed and precision.",
-    features: [
-      "Adaptive parallel transport engine",
-      "Real-time network telemetry",
-      "TLS deep inspection",
-      "HTTP/2 · HTTP/3 QUIC · FTP · SFTP · SCP",
-      "Browser-grade stealth mode",
-    ],
-    tech: ["Python", "HTTP/2", "HTTP/3 QUIC", "Networking"],
-    github: "https://github.com/scorpiocodex/Fluxion",
-    accentColor: "#00E5FF",
-  },
-  {
-    slug: "nyxora",
-    name: "Nyxora",
-    number: "04",
-    tagline: "Cryptographic Cipher Vault",
-    description:
-      "Terminal-native, zero-knowledge, quantum-resilient password vault. Military-grade encryption (Argon2id + XChaCha20-Poly1305) with offline-first architecture, Shamir's Secret Sharing recovery, and a cyberpunk CLI interface.",
-    features: [
-      "Argon2id + XChaCha20-Poly1305 encryption",
-      "Zero-knowledge offline-first architecture",
-      "Shamir's Secret Sharing recovery",
-      "Intel engine with breach detection (HIBP)",
-      "Memory-guarded key handling (mlock/VirtualLock)",
-    ],
-    tech: ["Python", "Cryptography", "SQLite", "CLI"],
-    github: "https://github.com/scorpiocodex/Nyxora",
-    accentColor: "#3FB950",
-  },
-];
 
 export default function Projects() {
   return (
@@ -122,7 +38,7 @@ export default function Projects() {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project }: { project: ProjectData }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const mouseX = useMotionValue(0);
@@ -239,21 +155,31 @@ function ProjectCard({ project }: { project: Project }) {
           ))}
         </ul>
 
-        {/* Tech badges */}
-        <div className="flex flex-wrap gap-2 relative z-10 pt-4 border-t border-border/40">
-          {project.tech.map((t) => (
-            <span
-              key={t}
-              className="font-mono text-[10px] px-2.5 py-1 rounded-md"
-              style={{
-                background: `${project.accentColor}0d`,
-                border: `1px solid ${project.accentColor}25`,
-                color: project.accentColor,
-              }}
-            >
-              {t}
-            </span>
-          ))}
+        {/* Bottom row: tech badges + case study link */}
+        <div className="flex items-end justify-between gap-4 relative z-10 pt-4 border-t border-border/40">
+          <div className="flex flex-wrap gap-2">
+            {project.tech.map((t) => (
+              <span
+                key={t}
+                className="font-mono text-[10px] px-2.5 py-1 rounded-md"
+                style={{
+                  background: `${project.accentColor}0d`,
+                  border: `1px solid ${project.accentColor}25`,
+                  color: project.accentColor,
+                }}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+          <Link
+            href={`/projects/${project.slug}`}
+            className="font-mono text-[11px] whitespace-nowrap hover:underline transition-colors duration-200 shrink-0"
+            style={{ color: project.accentColor }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            Case Study →
+          </Link>
         </div>
       </motion.div>
     </FadeInItem>
