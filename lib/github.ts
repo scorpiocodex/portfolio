@@ -31,7 +31,7 @@ const STATIC_FALLBACK: GitHubData = {
   user: {
     name: "San Shibu",
     login: "scorpiocodex",
-    avatarUrl: null,
+    avatarUrl: "https://avatars.githubusercontent.com/u/212041449?v=4",
     url: "https://github.com/scorpiocodex",
   },
   repos: [
