@@ -27,6 +27,8 @@ export default async function Home() {
         <div className="section-divider" />
         <Timeline />
         <div className="section-divider" />
+        <Projects />
+        <div className="section-divider" />
         <Skills />
         <div className="section-divider" />
         <GitHub data={githubData} />

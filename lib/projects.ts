@@ -436,9 +436,5 @@ export function getProjectBySlug(slug: string): ProjectData | undefined {
 }
 
 export function getAllSlugs(): string[] {
-    return PROJECTS.filter(p => p.slug === "nyxora").map((p) => p.slug);
+    return PROJECTS.map((p) => p.slug);
 }
-
-export const VISIBLE_PROJECTS = PROJECTS.filter(
-    (p) => p.slug === "nyxora"
-);
