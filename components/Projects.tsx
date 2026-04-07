@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProjectData } from "@/lib/projects";
-import { PROJECTS } from "@/lib/projects";
+import { VISIBLE_PROJECTS as PROJECTS } from "@/lib/projects";
 import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { MouseEvent, useRef } from "react";
@@ -28,7 +28,7 @@ export default function Projects() {
         {/* Project cards */}
         <FadeInStagger staggerDelay={0.1}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5">
-            {PROJECTS.map((project) => (
+            {false && PROJECTS.map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}
           </div>

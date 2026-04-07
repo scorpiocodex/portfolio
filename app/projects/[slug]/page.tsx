@@ -9,7 +9,7 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-    return getAllSlugs().map((slug) => ({ slug }));
+    return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -30,13 +30,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 }
 
-export default async function ProjectPage({ params }: Props) {
-    const { slug } = await params;
-    const project = getProjectBySlug(slug);
-
-    if (!project) {
-        notFound();
-    }
-
-    return <ProjectDetail project={project} />;
+export default async function ProjectPage() {
+    notFound();
 }
