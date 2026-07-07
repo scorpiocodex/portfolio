@@ -57,7 +57,7 @@ export default function CommandPalette() {
         },
         {
             id: "action-email", name: "Send Email", category: "Actions", icon: <EmailIcon className="w-3.5 h-3.5" />, action: () => {
-                window.location.href = `mailto:${SOCIAL.email}`;
+                window.location.assign(`mailto:${SOCIAL.email}`);
             }
         },
         {
@@ -73,10 +73,6 @@ export default function CommandPalette() {
     const filteredCommands = search
         ? commands.filter(cmd => cmd.name.toLowerCase().includes(search.toLowerCase()) || cmd.category.toLowerCase().includes(search.toLowerCase()))
         : commands;
-
-    useEffect(() => {
-        setSelectedIndex(0);
-    }, [search]);
 
     // Allow other components (e.g. the nav ⌘K chip) to open the palette.
     useEffect(() => {
@@ -161,7 +157,10 @@ export default function CommandPalette() {
                             <input
                                 ref={inputRef}
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={(e) => {
+                                    setSearch(e.target.value);
+                                    setSelectedIndex(0);
+                                }}
                                 placeholder="Type a command or search..."
                                 className="flex-1 bg-transparent border-none outline-none text-sm text-text-primary placeholder:text-text-secondary"
                             />

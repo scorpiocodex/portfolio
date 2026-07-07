@@ -143,7 +143,7 @@ export default function EasterEgg() {
                             className="flex-1 p-4 overflow-y-auto text-sm text-text-primary"
                         >
                             <div className="mb-4">
-                                <span className="text-accent">Welcome to v2.0.0. Type 'help' to get started.</span>
+                                <span className="text-accent">Welcome to v2.0.0. Type &apos;help&apos; to get started.</span>
                             </div>
 
                             {history.map((line, i) => (
