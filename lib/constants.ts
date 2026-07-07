@@ -20,8 +20,6 @@ export const SOCIAL = {
         url: "https://www.linkedin.com/in/san-shibu-8250a9178/",
     },
     email: "sanshibu2@gmail.com",
-    phone: "+91 9605770221",
-    phoneHref: "tel:+919605770221",
     twitter: "@sanshibu2",
     location: "Ernakulam, Kerala, India",
 } as const;
@@ -32,11 +30,11 @@ export const RESUME = {
 } as const;
 
 export const NAV_LINKS = [
-    { label: "About", href: "#about", id: "about" },
-    { label: "Philosophy", href: "#philosophy", id: "philosophy" },
-    { label: "Experience", href: "#experience", id: "experience" },
     { label: "Projects", href: "#projects", id: "projects" },
+    { label: "About", href: "#about", id: "about" },
     { label: "Skills", href: "#skills", id: "skills" },
+    { label: "Education", href: "#experience", id: "experience" },
+    { label: "Philosophy", href: "#philosophy", id: "philosophy" },
     { label: "GitHub", href: "#github", id: "github" },
     { label: "Contact", href: "#contact", id: "contact" },
 ] as const;
@@ -48,7 +46,7 @@ export const KEYWORDS = [
     "Python developer",
     "IT professional",
     "web developer",
-    "Watchflow",
+    "Nyxora",
     "scorpiocodex",
     "Scaler Academy",
     "San Shibu",

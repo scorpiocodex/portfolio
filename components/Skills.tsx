@@ -294,7 +294,7 @@ export default function Skills() {
 
         {/* Header */}
         <FadeIn className="mb-16">
-          <AnimatedSectionNumber number="05" label="Skills" />
+          <AnimatedSectionNumber number="03" label="Skills" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
             Technical Stack
           </h2>

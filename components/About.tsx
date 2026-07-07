@@ -33,12 +33,12 @@ const focusAreas = [
 
 export default function About() {
   return (
-    <section id="about" className="py-24 lg:py-32 relative z-10 bg-bg">
+    <section id="about" className="py-24 lg:py-32 relative z-10">
       <div className="max-w-content mx-auto px-6">
 
         {/* Section header */}
         <FadeIn className="mb-16">
-          <AnimatedSectionNumber number="01" label="About" />
+          <AnimatedSectionNumber number="02" label="About" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
             Who I Am
           </h2>
@@ -83,7 +83,6 @@ export default function About() {
             {/* Animated stats */}
             <div className="flex flex-wrap gap-10 mt-8 pt-8 border-t border-border/50">
               {[
-                { value: 4, suffix: "+", label: "Projects Built" },
                 { value: 17, suffix: "+", label: "Technologies" },
                 { value: 400, suffix: "+", label: "Contributions" },
               ].map((stat) => (

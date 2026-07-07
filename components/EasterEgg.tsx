@@ -20,6 +20,7 @@ export default function EasterEgg() {
     const [input, setInput] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const previouslyFocused = useRef<HTMLElement | null>(null);
 
     // Konami Code listener
     useEffect(() => {
@@ -49,8 +50,11 @@ export default function EasterEgg() {
     }, [isOpen]);
 
     useEffect(() => {
-        if (isOpen && inputRef.current) {
+        if (isOpen) {
+            previouslyFocused.current = document.activeElement as HTMLElement;
             setTimeout(() => inputRef.current?.focus(), 100);
+        } else {
+            previouslyFocused.current?.focus?.();
         }
     }, [isOpen]);
 
@@ -116,6 +120,9 @@ export default function EasterEgg() {
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Hidden terminal"
                         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-2xl bg-surface border border-border shadow-2xl rounded-lg overflow-hidden z-[101] font-jetbrains-mono flex flex-col h-[50vh]"
                     >
                         {/* Terminal Header */}

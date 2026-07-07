@@ -21,7 +21,7 @@ export default function GitHub({ data }: { data: GitHubData }) {
 
         {/* Profile row */}
         <FadeIn delay={0.05} className="mb-10">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 sm:p-5 rounded-card border border-border bg-surface/40 max-w-md">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 sm:p-5 rounded-card border border-border bg-surface/30 backdrop-blur-sm max-w-md">
             <div className="w-12 h-12 rounded-full bg-surface-2 border border-border flex items-center justify-center shrink-0 overflow-hidden">
               {user.avatarUrl ? (
                 <Image
@@ -77,7 +77,7 @@ export default function GitHub({ data }: { data: GitHubData }) {
                   href={repo.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col p-5 h-full rounded-card border border-border bg-surface/40 card-glow hover:border-[var(--r-accent)]/40 transition-all duration-300"
+                  className="group flex flex-col p-5 h-full rounded-card border border-border bg-surface/30 backdrop-blur-sm card-glow hover:border-[var(--r-accent)]/40 transition-all duration-300"
                   style={{ "--r-accent": repo.accent } as React.CSSProperties}
                 >
                   <div className="flex items-start justify-between mb-3">

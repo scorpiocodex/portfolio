@@ -2,6 +2,7 @@ import CommandPalette from "@/components/CommandPalette";
 import CursorSpotlight from "@/components/CursorSpotlight";
 import EasterEgg from "@/components/EasterEgg";
 import { KEYWORDS, SITE, SOCIAL } from "@/lib/constants";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
@@ -49,6 +50,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: SITE.title,
   description: SITE.description,
+  alternates: {
+    canonical: "/",
+  },
   keywords: [...KEYWORDS],
   authors: [{ name: SITE.name, url: SOCIAL.github.url }],
   creator: SITE.name,
@@ -82,6 +86,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <head>
@@ -118,6 +123,7 @@ export default function RootLayout({
         {children}
         <CommandPalette />
         <EasterEgg />
+        <Analytics />
       </body>
     </html>
   );

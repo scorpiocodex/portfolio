@@ -12,27 +12,15 @@ const philosophies = [
   },
   {
     number: "02",
-    title: "Architecture defines scalability.",
-    body: "A well-designed system handles growth naturally. Poor architecture forces rewrites. Every structural decision is a long-term commitment.",
-    accent: "#7C3AED",
-  },
-  {
-    number: "03",
     title: "Simplicity scales better than complexity.",
     body: "The best systems are minimal. Complexity creates surface area for failure. Clean, focused modules outperform monolithic, over-engineered solutions.",
     accent: "#00E5FF",
   },
   {
-    number: "04",
+    number: "03",
     title: "Security is foundational.",
     body: "Security cannot be retrofitted. It must be embedded in architecture from the first decision. Every input boundary, every configuration path, every privilege surface matters.",
     accent: "#3FB950",
-  },
-  {
-    number: "05",
-    title: "Tools should feel powerful but intuitive.",
-    body: "Power without usability is friction. The best developer tools balance deep capability with a clear, predictable interface that rewards exploration.",
-    accent: "#FF6B6B",
   },
 ];
 
@@ -43,7 +31,7 @@ export default function Philosophy() {
 
         {/* Header */}
         <FadeIn className="mb-14">
-          <AnimatedSectionNumber number="02" label="Philosophy" />
+          <AnimatedSectionNumber number="05" label="Philosophy" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
             Engineering Principles
           </h2>
@@ -52,15 +40,10 @@ export default function Philosophy() {
           </p>
         </FadeIn>
 
-        {/* Grid: 3 + 2 */}
+        {/* Grid */}
         <FadeInStagger staggerDelay={0.09}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-            {philosophies.slice(0, 3).map((p) => (
-              <PhilosophyCard key={p.number} {...p} />
-            ))}
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {philosophies.slice(3).map((p) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {philosophies.map((p) => (
               <PhilosophyCard key={p.number} {...p} />
             ))}
           </div>

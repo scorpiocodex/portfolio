@@ -217,3 +217,67 @@ body {
 .perspective-1000 {
   perspective: 1000px;
 }
+
+/* ─── Glass / Depth ──────────────────────────────────────────────────────── */
+.glass {
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+}
+
+/* ─── Minimal accent glow (per design system: subtle only) ───────────────── */
+.text-glow-accent {
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* ─── Encrypted / cyberpunk accents (used sparingly) ─────────────────────── */
+@keyframes glitch-shift {
+  0%, 92%, 100% { transform: translate(0, 0); }
+  93% { transform: translate(-1px, 1px); }
+  95% { transform: translate(1px, -1px); }
+  97% { transform: translate(-1px, 0); }
+}
+
+.glitch {
+  animation: glitch-shift 6s steps(1) infinite;
+}
+
+@keyframes intro-bar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.intro-bar {
+  animation: intro-bar 1.5s ease-out forwards;
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,
+      transparent 0,
+      transparent 2px,
+      rgba(0, 0, 0, 0.045) 3px,
+      rgba(0, 0, 0, 0.045) 3px);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+  }
+}

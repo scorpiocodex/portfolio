@@ -80,11 +80,20 @@ export default function Constellation() {
             animationFrameId = requestAnimationFrame(animate);
         };
 
+        const prefersReduced = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
         init();
-        animate();
+        if (prefersReduced) {
+            draw(); // render a single static frame — no animation loop
+        } else {
+            animate();
+        }
 
         const handleResize = () => {
             init();
+            if (prefersReduced) draw();
         };
 
         window.addEventListener("resize", handleResize);

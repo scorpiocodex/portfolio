@@ -4,7 +4,6 @@ import { motion, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function CursorSpotlight() {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isVisible, setIsVisible] = useState(false);
 
     // Use springs for smooth following
@@ -14,7 +13,6 @@ export default function CursorSpotlight() {
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
             cursorX.set(e.clientX);
             cursorY.set(e.clientY);
 

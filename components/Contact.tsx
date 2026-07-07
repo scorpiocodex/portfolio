@@ -3,7 +3,7 @@
 import { RESUME, SOCIAL } from "@/lib/constants";
 import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
-import { DownloadIcon, EmailIcon, ExternalLinkIcon, GithubIcon, LinkedInIcon, LocationIcon, PhoneIcon } from "./icons";
+import { DownloadIcon, EmailIcon, ExternalLinkIcon, GithubIcon, LinkedInIcon, LocationIcon } from "./icons";
 import Magnetic from "./Magnetic";
 
 const CONTACT_LINKS = [
@@ -30,14 +30,6 @@ const CONTACT_LINKS = [
     icon: <LinkedInIcon className="w-4 h-4" />,
     color: "#0A66C2",
     external: true,
-  },
-  {
-    label: "Phone",
-    value: SOCIAL.phone,
-    href: SOCIAL.phoneHref,
-    icon: <PhoneIcon className="w-4 h-4" />,
-    color: "#3FB950",
-    external: false,
   },
   {
     label: "Location",
@@ -111,7 +103,7 @@ export default function Contact() {
                       href={link.href}
                       target={link.external ? "_blank" : undefined}
                       rel={link.external ? "noopener noreferrer" : undefined}
-                      className="group flex items-center gap-4 p-4 rounded-card border border-border bg-surface/40 card-glow transition-all duration-200"
+                      className="group flex items-center gap-4 p-4 rounded-card border border-border bg-surface/30 backdrop-blur-sm card-glow transition-all duration-200"
                     >
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
@@ -135,7 +127,7 @@ export default function Contact() {
                       )}
                     </a>
                   ) : (
-                    <div className="flex items-center gap-4 p-4 rounded-card border border-border bg-surface/40">
+                    <div className="flex items-center gap-4 p-4 rounded-card border border-border bg-surface/30 backdrop-blur-sm">
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                         style={{ backgroundColor: `${link.color}15`, color: link.color }}

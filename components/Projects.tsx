@@ -16,18 +16,18 @@ export default function Projects() {
 
         {/* Header */}
         <FadeIn className="mb-16">
-          <AnimatedSectionNumber number="04" label="Projects" />
+          <AnimatedSectionNumber number="01" label="Projects" />
           <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
-            Systems Built
+            Featured Work
           </h2>
           <p className="text-text-secondary text-base mt-3 max-w-md leading-relaxed">
-            Production-grade Python CLI tools engineered with precision. Each built from first principles.
+            A production-grade, zero-knowledge Python CLI — engineered from first principles for security and precision.
           </p>
         </FadeIn>
 
         {/* Project cards */}
         <FadeInStagger staggerDelay={0.1}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 max-w-2xl mx-auto">
             {PROJECTS.map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}
@@ -88,7 +88,7 @@ function ProjectCard({ project }: { project: ProjectData }) {
           y: -4,
         }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="group relative h-full flex flex-col p-6 rounded-card border border-border bg-surface/50 cursor-default overflow-hidden will-change-transform"
+        className="group relative h-full flex flex-col p-7 rounded-card border border-border bg-surface/40 backdrop-blur-sm scanlines cursor-default overflow-hidden will-change-transform"
       >
         {/* Top accent line on hover */}
         <div
@@ -107,13 +107,25 @@ function ProjectCard({ project }: { project: ProjectData }) {
         {/* Header */}
         <div className="flex items-start justify-between mb-5 relative z-10">
           <div>
-            <div
-              className="font-mono text-[10px] tracking-widest mb-2 uppercase"
-              style={{ color: project.accentColor }}
-            >
-              {project.number}
+            <div className="flex items-center gap-2 mb-3">
+              <span
+                className="font-mono text-[9px] tracking-[0.2em] uppercase px-2 py-0.5 rounded border"
+                style={{
+                  color: project.accentColor,
+                  borderColor: `${project.accentColor}40`,
+                  backgroundColor: `${project.accentColor}12`,
+                }}
+              >
+                ◆ Flagship
+              </span>
+              <span
+                className="font-mono text-[10px] tracking-widest uppercase"
+                style={{ color: project.accentColor }}
+              >
+                {project.number}
+              </span>
             </div>
-            <h3 className="font-space-grotesk text-xl font-bold text-text-primary group-hover:text-white transition-colors duration-200">
+            <h3 className="font-space-grotesk text-2xl font-bold text-text-primary group-hover:text-white transition-colors duration-200">
               {project.name}
             </h3>
           </div>

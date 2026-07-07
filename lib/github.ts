@@ -75,40 +75,13 @@ const STATIC_FALLBACK: GitHubData = {
   },
   repos: [
     {
-      name: "Watchflow",
-      description: "Next-gen pipeline automation CLI — define NLP intents in YAML to trigger topological shell workflows on file changes. Daemon orchestration + dry-run simulation.",
-      language: "Python",
-      langColor: "#3572A5",
-      stars: "—",
-      url: "https://github.com/scorpiocodex/Watchflow",
-      accent: "#58A6FF",
-    },
-    {
-      name: "Termbackup",
-      description: "Advanced zero-knowledge backup architecture interfacing directly with the GitHub API. Mathematically enforced security and next-gen terminal UI paradigms.",
-      language: "Python",
-      langColor: "#3572A5",
-      stars: "—",
-      url: "https://github.com/scorpiocodex/Termbackup",
-      accent: "#7C3AED",
-    },
-    {
-      name: "Fluxion",
-      description: "The Intelligent Network Command Engine — CLI download accelerator with adaptive parallel transport, TLS deep inspection, and HTTP/2 · HTTP/3 QUIC · FTP · SFTP · SCP.",
-      language: "Python",
-      langColor: "#3572A5",
-      stars: "—",
-      url: "https://github.com/scorpiocodex/Fluxion",
-      accent: "#00E5FF",
-    },
-    {
       name: "Nyxora",
-      description: "Terminal-native, zero-knowledge, quantum-resilient password vault. Military-grade encryption (Argon2id + XChaCha20-Poly1305) with offline-first architecture and cyberpunk CLI.",
+      description: "Terminal-native, zero-knowledge password vault. Argon2id key derivation + XChaCha20-Poly1305 authenticated encryption, offline-first architecture, and a polished terminal interface.",
       language: "Python",
       langColor: "#3572A5",
       stars: "—",
       url: "https://github.com/scorpiocodex/Nyxora",
-      accent: "#3FB950",
+      accent: "#58A6FF",
     },
   ],
   contributions: generateMockContributions(),
@@ -117,17 +90,22 @@ const STATIC_FALLBACK: GitHubData = {
 function generateMockContributions() {
   const weeks: ContributionWeek[] = [];
   const colors = ["#161B22", "#0E4429", "#006D32", "#26A641", "#39D353"];
+  const totalDays = 26 * 7;
+  const today = new Date();
   for (let w = 0; w < 26; w++) {
     const days: ContributionDay[] = [];
     for (let d = 0; d < 7; d++) {
-      const seed = w * 7 + d;
-      const pseudo = ((seed * 1103515245 + 12345) & 0x7fffffff) % 100;
+      const index = w * 7 + d;
+      const pseudo = ((index * 1103515245 + 12345) & 0x7fffffff) % 100;
       let level = 0;
       if (pseudo >= 40 && pseudo < 60) level = 1;
       else if (pseudo >= 60 && pseudo < 75) level = 2;
       else if (pseudo >= 75 && pseudo < 88) level = 3;
       else if (pseudo >= 88) level = 4;
-      days.push({ color: colors[level], contributionCount: level * 3, date: "" });
+      const cellDate = new Date(today);
+      cellDate.setDate(today.getDate() - (totalDays - 1 - index));
+      const date = cellDate.toISOString().slice(0, 10);
+      days.push({ color: colors[level], contributionCount: level * 3, date });
     }
     weeks.push({ contributionDays: days });
   }
@@ -140,7 +118,6 @@ export async function getGitHubData(): Promise<GitHubData> {
   const username = SOCIAL.github.username;
 
   if (!token) {
-    console.log("No GITHUB_PAT found. Falling back to static data.");
     return STATIC_FALLBACK;
   }
 
@@ -232,7 +209,6 @@ export async function getGitHubData(): Promise<GitHubData> {
     };
   } catch (error) {
     console.error("GitHub API Error:", error);
-    console.log("Falling back to static GitHub data.");
     return STATIC_FALLBACK;
   }
 }

@@ -18,6 +18,7 @@ export default function CommandPalette() {
     const [search, setSearch] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
+    const previouslyFocused = useRef<HTMLElement | null>(null);
 
     // Toggle dark/ocean theme programmatically
     const triggerTheme = (t: "midnight" | "deep-ocean") => {
@@ -39,10 +40,10 @@ export default function CommandPalette() {
     };
 
     const commands: CommandItem[] = [
-        { id: "nav-about", name: "Go to About", category: "Navigation", action: () => navTo("about") },
-        { id: "nav-experience", name: "Go to Experience", category: "Navigation", action: () => navTo("experience") },
         { id: "nav-projects", name: "Go to Projects", category: "Navigation", action: () => navTo("projects") },
+        { id: "nav-about", name: "Go to About", category: "Navigation", action: () => navTo("about") },
         { id: "nav-skills", name: "Go to Skills", category: "Navigation", action: () => navTo("skills") },
+        { id: "nav-experience", name: "Go to Education", category: "Navigation", action: () => navTo("experience") },
         { id: "nav-github", name: "Go to GitHub", category: "Navigation", action: () => navTo("github") },
         { id: "nav-contact", name: "Go to Contact", category: "Navigation", action: () => navTo("contact") },
 
@@ -61,7 +62,7 @@ export default function CommandPalette() {
         },
         {
             id: "action-github", name: "Open GitHub Profile", category: "Actions", icon: <GithubIcon className="w-3.5 h-3.5" />, action: () => {
-                window.open(SOCIAL.github.url, "_blank");
+                window.open(SOCIAL.github.url, "_blank", "noopener,noreferrer");
             }
         },
 
@@ -77,6 +78,13 @@ export default function CommandPalette() {
         setSelectedIndex(0);
     }, [search]);
 
+    // Allow other components (e.g. the nav ⌘K chip) to open the palette.
+    useEffect(() => {
+        const onOpen = () => setOpen(true);
+        window.addEventListener("open-command-palette", onOpen);
+        return () => window.removeEventListener("open-command-palette", onOpen);
+    }, []);
+
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
             if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -87,11 +95,11 @@ export default function CommandPalette() {
                 setOpen(false);
             }
             if (open) {
-                if (e.key === "ArrowDown") {
+                if (e.key === "ArrowDown" && filteredCommands.length > 0) {
                     e.preventDefault();
                     setSelectedIndex((s) => (s + 1) % filteredCommands.length);
                 }
-                if (e.key === "ArrowUp") {
+                if (e.key === "ArrowUp" && filteredCommands.length > 0) {
                     e.preventDefault();
                     setSelectedIndex((s) => (s - 1 + filteredCommands.length) % filteredCommands.length);
                 }
@@ -108,9 +116,11 @@ export default function CommandPalette() {
 
     useEffect(() => {
         if (open) {
+            previouslyFocused.current = document.activeElement as HTMLElement;
             setTimeout(() => inputRef.current?.focus(), 50);
         } else {
             setSearch("");
+            previouslyFocused.current?.focus?.();
         }
     }, [open]);
 
@@ -137,6 +147,9 @@ export default function CommandPalette() {
                         animate={{ opacity: 1, scale: 1, y: 0, x: "-50%" }}
                         exit={{ opacity: 0, scale: 0.95, y: -20, x: "-50%" }}
                         transition={{ duration: 0.15 }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Command palette"
                         className="fixed top-[15%] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg bg-surface border border-border rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col max-h-[60vh]"
                     >
                         <div className="flex items-center px-4 py-3 border-b border-border/50">

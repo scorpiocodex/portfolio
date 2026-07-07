@@ -34,9 +34,9 @@ export default function Timeline() {
 
     return (
         <section id="experience" className="py-24 lg:py-32">
-            <div className="max-w-content mx-auto px-6" ref={containerRef}>
+            <div className="max-w-content mx-auto px-6 relative" ref={containerRef}>
                 <FadeIn className="mb-20">
-                    <AnimatedSectionNumber number="03" label="Experience" />
+                    <AnimatedSectionNumber number="04" label="Education" />
                     <h2 className="font-space-grotesk text-3xl lg:text-4xl font-bold text-text-primary tracking-tight">
                         Education & Journey
                     </h2>

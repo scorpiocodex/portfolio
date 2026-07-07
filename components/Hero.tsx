@@ -1,10 +1,10 @@
 "use client";
 
+import { gsap } from "@/lib/gsap";
 import { RESUME, SOCIAL } from "@/lib/constants";
-import { motion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import Constellation from "./Constellation";
+import { useEffect, useRef, useState } from "react";
 import Magnetic from "./Magnetic";
 import { DownloadIcon, GithubIcon } from "./icons";
 
@@ -17,10 +17,10 @@ const TERMINAL_LINES: TerminalLine[] = [
   { text: "$ san --whoami", type: "command" },
   { text: "✓ Full-Stack & Systems Dev  |  BIT · Scaler", type: "success" },
   { text: "✓ Python · JavaScript · React · Node.js · PostgreSQL", type: "success" },
-  { text: "$ watchflow start --intent=dev.yaml --watch=./src", type: "command" },
-  { text: "✓ YAML intents loaded — 3 workflows active", type: "success" },
-  { text: "✓ Daemon armed — topology resolved", type: "success" },
-  { text: "∎ Pipeline ready — awaiting file events", type: "info" },
+  { text: "$ nyx vault init", type: "command" },
+  { text: "✓ Argon2id key derived — XChaCha20-Poly1305 ready", type: "success" },
+  { text: "✓ Vault sealed — zero-knowledge, offline-first", type: "success" },
+  { text: "∎ Vault ready — awaiting commands", type: "info" },
 ];
 
 const lineColorClass: Record<TerminalLine["type"], string> = {
@@ -41,7 +41,39 @@ export default function Hero() {
   const [activeLineIdx, setActiveLineIdx] = useState(-1);
   const [typingDone, setTypingDone] = useState(false);
 
+  const gridRef = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
+
+  // GSAP entrance timeline (owns the hero content reveal).
+  useGSAP(
+    () => {
+      const prefersReduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      if (prefersReduced) return; // leave content visible, no motion
+      const els = [leftRef.current, rightRef.current].filter(
+        Boolean
+      ) as HTMLElement[];
+      if (!els.length) return;
+      gsap.set(els, { opacity: 0, y: 28 });
+      gsap.to(els, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        stagger: 0.15,
+        delay: 0.15,
+      });
+    },
+    { scope: gridRef }
+  );
+
   useEffect(() => {
+    // The terminal typewriter is a one-time, non-spatial character reveal (no
+    // parallax/zoom/drift), so it plays regardless of prefers-reduced-motion.
+    // The genuinely spatial/looping animations (constellation/WebGL drift,
+    // looping gradients) still respect reduced motion.
     let cancelled = false;
 
     const run = async () => {
@@ -82,7 +114,7 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
-      <Constellation />
+      {/* Depth comes from the site-wide BackgroundField (mounted in the page). */}
 
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none select-none">
@@ -91,14 +123,13 @@ export default function Hero() {
       </div>
 
       <div className="relative max-w-content mx-auto px-6 w-full py-20 lg:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-14 lg:gap-12 items-center">
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-14 lg:gap-12 items-center"
+        >
 
           {/* ── Left: Text ──────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          >
+          <div ref={leftRef}>
             {/* Avatar & Status chip */}
             <div className="flex items-center gap-4 mb-7">
               <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-full border border-border/80 overflow-hidden bg-surface p-0.5 card-glow">
@@ -107,6 +138,7 @@ export default function Hero() {
                     src="/avatar.png"
                     alt="San Shibu — Full-Stack Developer avatar"
                     fill
+                    sizes="(min-width: 640px) 80px, 64px"
                     className="object-cover scale-110"
                     priority
                   />
@@ -188,20 +220,16 @@ export default function Hero() {
                 </a>
               </Magnetic>
             </div>
-          </motion.div>
+          </div>
 
           {/* ── Right: Terminal ──────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          >
+          <div ref={rightRef}>
             <div className="relative">
               {/* Glow halo */}
               <div className="absolute -inset-[2px] rounded-[14px] bg-gradient-to-br from-accent/20 via-transparent to-accent-purple/15 blur-xl opacity-70" />
 
               {/* Terminal window */}
-              <div className="relative rounded-card border border-border bg-bg overflow-hidden terminal-scanlines">
+              <div className="relative rounded-card border border-border bg-bg/80 backdrop-blur-sm overflow-hidden terminal-scanlines">
 
                 {/* Window chrome */}
                 <div className="flex items-center gap-1.5 px-4 py-3 border-b border-surface-2 bg-surface">
@@ -219,7 +247,7 @@ export default function Hero() {
                 <div className="px-3 sm:px-5 pt-5 pb-6 font-mono text-[11px] sm:text-[13px] leading-[1.85] min-h-[200px] sm:min-h-[240px] overflow-x-auto">
                   {/* Path prompt */}
                   <div className="text-text-secondary/40 text-[11px] mb-3 select-none">
-                    san@scorpiocodex:~/projects/watchflow
+                    san@scorpiocodex:~/projects/nyxora
                   </div>
 
                   {TERMINAL_LINES.map((line, i) => {
@@ -252,10 +280,27 @@ export default function Hero() {
               </span>
               <div className="h-px flex-1 bg-border/40" />
             </div>
-          </motion.div>
+          </div>
 
         </div>
       </div>
+
+      {/* Scroll cue */}
+      <a
+        href="#projects"
+        aria-label="Scroll to projects"
+        className="absolute bottom-7 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 text-text-secondary/40 hover:text-accent transition-colors duration-200 z-10"
+      >
+        <span className="font-mono text-[9px] tracking-[0.35em] uppercase">Scroll</span>
+        <svg
+          className="w-3.5 h-3.5 animate-bounce"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M8 12.5a.75.75 0 01-.53-.22l-4.25-4.25a.75.75 0 111.06-1.06L8 10.69l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-.53.22z" />
+        </svg>
+      </a>
 
       {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-bg to-transparent pointer-events-none" />

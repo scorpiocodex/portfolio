@@ -12,6 +12,11 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    setIsMac(/Mac|iP(hone|ad|od)/.test(navigator.platform || navigator.userAgent));
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -92,6 +97,15 @@ export default function Navigation() {
 
           {/* Theme Toggle & GitHub CTA */}
           <div className="hidden md:flex items-center gap-4">
+            <button
+              onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
+              aria-label="Open command palette"
+              title="Command palette"
+              className="flex items-center gap-1 h-8 px-2.5 rounded-lg border border-border font-mono text-[10px] text-text-secondary hover:text-accent hover:border-accent transition-all duration-200"
+            >
+              <kbd className="font-mono">{isMac ? "⌘" : "Ctrl"}</kbd>
+              <kbd className="font-mono">K</kbd>
+            </button>
             <ThemeToggle />
             <a
               href={SOCIAL.github.url}
@@ -147,6 +161,9 @@ export default function Navigation() {
             {/* Drawer */}
             <motion.div
               id="mobile-menu"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -184,7 +201,7 @@ export default function Navigation() {
                     href={SOCIAL.github.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-sm text-accent font-mono w-max hover:text-accent-hover transition-colors"
+                    className="flex items-center gap-3 text-sm text-accent font-mono w-max hover:text-glow transition-colors"
                   >
                     <GithubIcon className="w-5 h-5" />
                     {SOCIAL.github.username}
