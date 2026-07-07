@@ -10,6 +10,15 @@ interface Props {
     title?: string;
 }
 
+/**
+ * Terminal output mixes ASCII with box-drawing (─│┌┐) and block (█░) glyphs.
+ * JetBrains Mono's `latin` subset lacks those, so the browser renders them from
+ * a fallback font at a different advance width — which breaks panel alignment.
+ * Force a single font that carries all of them at one cell width.
+ */
+const TERMINAL_FONT =
+    '"Cascadia Mono", "Cascadia Code", Consolas, ui-monospace, "SF Mono", Menlo, "DejaVu Sans Mono", "Liberation Mono", monospace';
+
 export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const outputRef = useRef<HTMLDivElement>(null);
@@ -115,7 +124,8 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
                 {/* Terminal output */}
                 <div
                     ref={outputRef}
-                    className="p-4 sm:p-5 font-mono text-[12px] sm:text-[13px] leading-[1.7] overflow-y-auto max-h-[460px] min-h-[200px] scrollbar-hide"
+                    className="p-4 sm:p-5 text-[12px] sm:text-[13px] leading-[1.7] overflow-auto max-h-[460px] min-h-[200px] scrollbar-hide"
+                    style={{ fontFamily: TERMINAL_FONT }}
                 >
                     {/* Welcome line */}
                     {!hasPlayed && !isPlaying && (
@@ -142,7 +152,7 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
                                     <span className="text-[#E6EDF3]">{step.command}</span>
                                 </div>
                             )}
-                            <pre className="text-[#8B949E] whitespace-pre-wrap mt-1 ml-0">{step.output}</pre>
+                            <pre className="text-[#8B949E] whitespace-pre mt-1 ml-0" style={{ fontFamily: TERMINAL_FONT }}>{step.output}</pre>
                         </div>
                     ))}
 
