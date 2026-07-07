@@ -25,6 +25,6 @@ Open [http://localhost:3000](http://localhost:3000) to view locally.
 
 ## Contact
 
-- Email: sanshibu2@gmail.com
+- Email: sanshibu.dev@gmail.com
 - GitHub: [@scorpiocodex](https://github.com/scorpiocodex)
 - LinkedIn: [san-shibu-8250a9178](https://www.linkedin.com/in/san-shibu-8250a9178/)

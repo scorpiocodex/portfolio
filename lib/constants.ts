@@ -19,7 +19,7 @@ export const SOCIAL = {
         name: "San Shibu",
         url: "https://www.linkedin.com/in/san-shibu-8250a9178/",
     },
-    email: "sanshibu2@gmail.com",
+    email: "sanshibu.dev@gmail.com",
     twitter: "@sanshibu2",
     location: "Ernakulam, Kerala, India",
 } as const;
