@@ -20,6 +20,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: `${project.name} — ${project.tagline} | ${SITE.name}`,
         description: project.description,
+        // Without this the root layout's canonical ("/") is inherited, telling search
+        // engines that every case study is a duplicate of the homepage.
+        alternates: { canonical: `/projects/${project.slug}` },
         openGraph: {
             title: `${project.name} — ${project.tagline}`,
             description: project.description,
