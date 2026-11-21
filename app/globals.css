@@ -216,6 +216,39 @@ body {
   text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
+/* ─── Intro gate ─────────────────────────────────────────────────────────────
+   <html data-intro="playing"> is set before first paint (app/layout.tsx) when the intro
+   should run. The overlay is always in the DOM but only displayed during that window, and
+   the hero entrance is held (paused at its first, transparent frame) until it ends. */
+.intro-overlay {
+  display: none;
+}
+
+html[data-intro="playing"] .intro-overlay {
+  display: flex;
+}
+
+html[data-intro="playing"] .hero-rise {
+  animation-play-state: paused;
+}
+
+/* Hero entrance: pure CSS, so server-rendered content is visible without JS. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-rise {
+  animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--rise-delay, 0s);
+}
+
 /* ─── Intro overlay bar + scanlines ──────────────────────────────────────── */
 @keyframes intro-bar {
   from {

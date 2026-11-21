@@ -1,16 +1,15 @@
 "use client";
 
-import { gsap } from "@/lib/gsap";
 import { RESUME, SOCIAL } from "@/lib/constants";
-import { useGSAP } from "@gsap/react";
+import { whenIntroDone } from "@/lib/intro";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Magnetic from "./Magnetic";
 import { DownloadIcon, GithubIcon } from "./icons";
 
 interface TerminalLine {
   text: string;
-  type: "command" | "success" | "info" | "dim";
+  type: "command" | "success" | "info";
 }
 
 const TERMINAL_LINES: TerminalLine[] = [
@@ -27,7 +26,6 @@ const lineColorClass: Record<TerminalLine["type"], string> = {
   command: "text-text-primary",
   success: "text-success",
   info: "text-accent",
-  dim: "text-text-secondary",
 };
 
 function msDelay(ms: number): Promise<void> {
@@ -41,33 +39,6 @@ export default function Hero() {
   const [activeLineIdx, setActiveLineIdx] = useState(-1);
   const [typingDone, setTypingDone] = useState(false);
 
-  const gridRef = useRef<HTMLDivElement>(null);
-  const leftRef = useRef<HTMLDivElement>(null);
-  const rightRef = useRef<HTMLDivElement>(null);
-
-  // GSAP entrance timeline (owns the hero content reveal).
-  useGSAP(
-    () => {
-      const prefersReduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      if (prefersReduced) return; // leave content visible, no motion
-      const els = [leftRef.current, rightRef.current].filter(
-        Boolean
-      ) as HTMLElement[];
-      if (!els.length) return;
-      gsap.set(els, { opacity: 0, y: 28 });
-      gsap.to(els, {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        stagger: 0.15,
-        delay: 0.15,
-      });
-    },
-    { scope: gridRef }
-  );
 
   useEffect(() => {
     // The terminal typewriter is a one-time, non-spatial character reveal (no
@@ -77,7 +48,10 @@ export default function Hero() {
     let cancelled = false;
 
     const run = async () => {
-      await msDelay(700);
+      // Don't type underneath the intro overlay — start once it has gone.
+      await whenIntroDone();
+      if (cancelled) return;
+      await msDelay(500);
 
       for (let i = 0; i < TERMINAL_LINES.length; i++) {
         if (cancelled) return;
@@ -123,13 +97,10 @@ export default function Hero() {
       </div>
 
       <div className="relative max-w-content mx-auto px-6 w-full py-20 lg:py-28">
-        <div
-          ref={gridRef}
-          className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-14 lg:gap-12 items-center"
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-14 lg:gap-12 items-center">
 
           {/* ── Left: Text ──────────────────────────────────────── */}
-          <div ref={leftRef}>
+          <div className="hero-rise" style={{ "--rise-delay": "0.15s" } as React.CSSProperties}>
             {/* Avatar & Status chip */}
             <div className="flex items-center gap-4 mb-7">
               <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-full border border-border/80 overflow-hidden bg-surface p-0.5 card-glow">
@@ -155,7 +126,7 @@ export default function Hero() {
                     Python Full-Stack Developer
                   </span>
                 </div>
-                <div className="font-mono text-[11px] text-text-secondary/70 tracking-[0.18em] uppercase ml-[18px]">
+                <div className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase ml-[18px]">
                   Open to Work
                 </div>
               </div>
@@ -164,7 +135,7 @@ export default function Hero() {
             {/* Headline */}
             <h1 className="font-space-grotesk text-[2rem] sm:text-[2.6rem] md:text-[3.2rem] lg:text-[3.6rem] xl:text-[4rem] font-bold text-text-primary leading-[1.08] tracking-tight mb-7">
               Building{" "}
-              <span className="gradient-text-animated pb-1">Full-Stack</span>
+              <span className="gradient-text-animated pb-1 whitespace-nowrap">Full-Stack</span>
               <br className="hidden sm:block" />
               {" "}Apps & Dev Tools.
             </h1>
@@ -223,7 +194,7 @@ export default function Hero() {
           </div>
 
           {/* ── Right: Terminal ──────────────────────────────────── */}
-          <div ref={rightRef}>
+          <div className="hero-rise" style={{ "--rise-delay": "0.3s" } as React.CSSProperties}>
             <div className="relative">
               {/* Glow halo */}
               <div className="absolute -inset-[2px] rounded-[14px] bg-gradient-to-br from-accent/20 via-transparent to-accent-purple/15 blur-xl opacity-70" />
@@ -237,7 +208,7 @@ export default function Hero() {
                   <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
                   <div className="w-3 h-3 rounded-full bg-[#28C840]" />
                   <div className="flex-1 flex items-center justify-center">
-                    <span className="font-mono text-[11px] text-text-secondary/60">
+                    <span className="font-mono text-[11px] text-text-secondary">
                       scorpiocodex — zsh — 80×24
                     </span>
                   </div>
@@ -246,7 +217,7 @@ export default function Hero() {
                 {/* Terminal body */}
                 <div className="px-3 sm:px-5 pt-5 pb-6 font-mono text-[11px] sm:text-[13px] leading-[1.85] min-h-[200px] sm:min-h-[240px] overflow-x-auto">
                   {/* Path prompt */}
-                  <div className="text-text-secondary/40 text-[11px] mb-3 select-none">
+                  <div className="text-text-secondary text-[11px] mb-3 select-none">
                     san@scorpiocodex:~/projects
                   </div>
 
@@ -275,7 +246,7 @@ export default function Hero() {
             {/* Footnote */}
             <div className="mt-4 flex items-center gap-2 px-1">
               <div className="h-px flex-1 bg-border/40" />
-              <span className="font-mono text-[10px] text-text-secondary/40 tracking-widest">
+              <span className="font-mono text-[10px] text-text-secondary tracking-widest">
                 SIMULATED SESSION
               </span>
               <div className="h-px flex-1 bg-border/40" />
@@ -289,9 +260,9 @@ export default function Hero() {
       <a
         href="#projects"
         aria-label="Scroll to projects"
-        className="absolute bottom-7 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 text-text-secondary/40 hover:text-accent transition-colors duration-200 z-10"
+        className="absolute bottom-7 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 text-text-secondary hover:text-accent transition-colors duration-200 z-10"
       >
-        <span className="font-mono text-[9px] tracking-[0.35em] uppercase">Scroll</span>
+        <span className="font-mono text-[10px] tracking-[0.35em] uppercase">Scroll</span>
         <svg
           className="w-3.5 h-3.5 animate-bounce"
           viewBox="0 0 16 16"

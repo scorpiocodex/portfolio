@@ -1,6 +1,7 @@
 import CommandPalette from "@/components/CommandPalette";
 import CursorSpotlight from "@/components/CursorSpotlight";
 import EasterEgg from "@/components/EasterEgg";
+import Providers from "@/components/Providers";
 import { KEYWORDS, SITE, SOCIAL } from "@/lib/constants";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
@@ -26,6 +27,20 @@ const jsonLd = {
     "Full-Stack Web Development",
   ],
 };
+
+const PRE_PAINT_SCRIPT = `(function(){var d=document.documentElement;
+try{if(localStorage.getItem('theme')==='deep-ocean')d.setAttribute('data-theme','deep-ocean')}catch(e){}
+try{if(!sessionStorage.getItem('intro-seen')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+d.setAttribute('data-intro','playing');setTimeout(function(){d.removeAttribute('data-intro')},4000)}}catch(e){}
+})();`;
+
+const NOSCRIPT_CSS =
+  '[style*="opacity:0;"],[style$="opacity:0"]{opacity:1!important;transform:none!important}';
+
+/** JSON.stringify output is safe inside a script tag except for "<" (e.g. "</script>"). */
+function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -92,26 +107,17 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Preconnect to external origins */}
-        <link rel="preconnect" href="https://api.github.com" />
-        <link rel="preconnect" href="https://avatars.githubusercontent.com" />
-        <link rel="dns-prefetch" href="https://api.github.com" />
-        <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />
-
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                if (localStorage.getItem('theme') === 'deep-ocean') {
-                  document.documentElement.setAttribute('data-theme', 'deep-ocean');
-                }
-              } catch (e) {}
-            `,
-          }}
-        />
+        {/* Runs before first paint: applies the saved theme and decides whether the intro
+            overlay should play (once per session, never under reduced motion). The timeout is a
+            failsafe so a failed script bundle can never leave the intro covering the page. */}
+        <script dangerouslySetInnerHTML={{ __html: PRE_PAINT_SCRIPT }} />
+        <noscript>
+          {/* Scroll-reveal sections are server-rendered hidden; without JS nothing would reveal them. */}
+          <style>{NOSCRIPT_CSS}</style>
+        </noscript>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
       </head>
       <body className="bg-bg text-text-primary font-inter antialiased overflow-x-hidden">
@@ -121,10 +127,12 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <CursorSpotlight />
-        {children}
-        <CommandPalette />
-        <EasterEgg />
+        <Providers>
+          <CursorSpotlight />
+          {children}
+          <CommandPalette />
+          <EasterEgg />
+        </Providers>
         <Analytics />
       </body>
     </html>
