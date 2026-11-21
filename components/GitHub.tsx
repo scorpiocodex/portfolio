@@ -151,7 +151,7 @@ export default function GitHub({ data }: { data: GitHubData }) {
 
                 <div aria-hidden="true" className="flex items-center gap-2 mt-4 justify-end">
                   <span className="font-mono text-[10px] text-text-secondary">Less</span>
-                  {["#161B22", "#0E4429", "#006D32", "#26A641", "#39D353"].map((c) => (
+                  {["var(--surface)", "#0E4429", "#006D32", "#26A641", "#39D353"].map((c) => (
                     <div key={c} className="w-3 h-3 rounded-sm" style={{ backgroundColor: c }} />
                   ))}
                   <span className="font-mono text-[10px] text-text-secondary">More</span>
@@ -194,7 +194,7 @@ function ContributionGrid({ weeks }: { weeks: ContributionWeek[] }) {
         <div key={weekIdx} className="flex flex-col gap-[3px]">
           {week.contributionDays.map((day, dayIdx) => {
             // GitHub's empty-cell colour is near-white; swap it for the site surface colour.
-            const bgColor = day.color === "#ebedf0" ? "#161b22" : day.color;
+            const bgColor = day.color === "#ebedf0" ? "var(--surface)" : day.color;
             return (
               <div
                 key={dayIdx}

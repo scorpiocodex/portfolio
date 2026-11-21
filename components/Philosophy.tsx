@@ -6,19 +6,19 @@ const philosophies = [
     number: "01",
     title: "UX matters across every interface.",
     body: "Whether it is a web application or a command-line tool, design discipline is non-negotiable. Structure, clarity, and responsiveness are not optional extras.",
-    accent: "#58A6FF",
+    accent: "var(--accent)",
   },
   {
     number: "02",
     title: "Simplicity scales better than complexity.",
     body: "The best systems are minimal. Complexity creates surface area for failure. Clean, focused modules outperform monolithic, over-engineered solutions.",
-    accent: "#00E5FF",
+    accent: "var(--glow)",
   },
   {
     number: "03",
     title: "Security is foundational.",
     body: "Security cannot be retrofitted. It must be embedded in architecture from the first decision. Every input boundary, every configuration path, every privilege surface matters.",
-    accent: "#3FB950",
+    accent: "var(--success)",
   },
 ];
 

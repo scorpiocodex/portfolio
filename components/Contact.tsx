@@ -10,7 +10,7 @@ const CONTACT_LINKS = [
     value: SOCIAL.email,
     href: `mailto:${SOCIAL.email}`,
     icon: <EmailIcon className="w-4 h-4" />,
-    color: "#58A6FF",
+    color: "var(--accent)",
     external: false,
   },
   {
@@ -18,7 +18,7 @@ const CONTACT_LINKS = [
     value: SOCIAL.github.username,
     href: SOCIAL.github.url,
     icon: <GithubIcon className="w-4 h-4" />,
-    color: "#E6EDF3",
+    color: "var(--text-primary)",
     external: true,
   },
   {
@@ -34,7 +34,7 @@ const CONTACT_LINKS = [
     value: SOCIAL.location,
     href: null,
     icon: <LocationIcon className="w-4 h-4" />,
-    color: "#8B949E",
+    color: "var(--text-secondary)",
     external: false,
   },
 ];
@@ -105,7 +105,7 @@ export default function Contact() {
                     >
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: `${link.color}15`, color: link.color }}
+                        style={{ backgroundColor: `color-mix(in srgb, ${link.color} 8%, transparent)`, color: link.color }}
                       >
                         {link.icon}
                       </div>
@@ -128,7 +128,7 @@ export default function Contact() {
                     <div className="flex items-center gap-4 p-4 rounded-card border border-border bg-surface/30 backdrop-blur-sm">
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: `${link.color}15`, color: link.color }}
+                        style={{ backgroundColor: `color-mix(in srgb, ${link.color} 8%, transparent)`, color: link.color }}
                       >
                         {link.icon}
                       </div>

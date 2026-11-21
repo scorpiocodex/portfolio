@@ -98,7 +98,7 @@ export default function ProjectDetail({ project }: { project: ProjectData }) {
                                     className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-card transition-all duration-200"
                                     style={{
                                         backgroundColor: project.accentColor,
-                                        color: "#0D1117",
+                                        color: "var(--bg)",
                                     }}
                                 >
                                     <GithubIcon className="w-4 h-4" />
@@ -314,7 +314,7 @@ export default function ProjectDetail({ project }: { project: ProjectData }) {
                                 className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium rounded-card transition-all duration-200"
                                 style={{
                                     backgroundColor: project.accentColor,
-                                    color: "#0D1117",
+                                    color: "var(--bg)",
                                 }}
                             >
                                 <GithubIcon className="w-4 h-4" />

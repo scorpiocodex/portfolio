@@ -1,12 +1,13 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef, type ReactNode } from "react";
+import { useTheme, useThemeHex, type ThemeName } from "@/lib/theme";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import * as THREE from "three";
 
 /* Soft radial sprite so points render as glowing dots, not squares. */
 function useSpriteTexture() {
-    return useMemo(() => {
+    const texture = useMemo(() => {
         const s = 64;
         const canvas = document.createElement("canvas");
         canvas.width = canvas.height = s;
@@ -23,6 +24,11 @@ function useSpriteTexture() {
         tex.needsUpdate = true;
         return tex;
     }, []);
+
+    // Release the GPU copy when the scene unmounts (e.g. a resize flips the layer off).
+    useEffect(() => () => texture.dispose(), [texture]);
+
+    return texture;
 }
 
 function makePositions(count: number, radius: number) {
@@ -98,21 +104,31 @@ function ParallaxRig({ children }: { children: ReactNode }) {
     return <group ref={group}>{children}</group>;
 }
 
-export default function HeroScene({ active = true }: { active?: boolean }) {
+/* Particle layers per theme. Midnight keeps its original palette; Deep Ocean shifts
+   to teal / blue. The fog colour always tracks the live --bg token. */
+const LAYER_COLORS: Record<ThemeName, [string, string, string]> = {
+    midnight: ["#8ec5ff", "#a78bfa", "#5eead4"],
+    "deep-ocean": ["#7ee8dc", "#93c5fd", "#67e8f9"],
+};
+
+export default function HeroScene() {
     const texture = useSpriteTexture();
+    const theme = useTheme();
+    const { bg } = useThemeHex();
+    const [c1, c2, c3] = LAYER_COLORS[theme];
+
     return (
         <Canvas
             className="!absolute inset-0"
-            frameloop={active ? "always" : "never"}
-            dpr={[1, 1.75]}
+            dpr={[1, 1.5]}
             camera={{ position: [0, 0, 8], fov: 60 }}
             gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         >
-            <fog attach="fog" args={["#0D1117", 6, 18]} />
+            <fog attach="fog" args={[bg, 6, 18]} />
             <ParallaxRig>
-                <Layer texture={texture} count={2200} radius={7} color="#8ec5ff" size={0.05} speed={0.03} opacity={0.9} />
-                <Layer texture={texture} count={1100} radius={9} color="#a78bfa" size={0.08} speed={0.018} opacity={0.65} />
-                <Layer texture={texture} count={700} radius={5} color="#5eead4" size={0.04} speed={0.045} opacity={0.7} />
+                <Layer texture={texture} count={2200} radius={7} color={c1} size={0.05} speed={0.03} opacity={0.9} />
+                <Layer texture={texture} count={1100} radius={9} color={c2} size={0.08} speed={0.018} opacity={0.65} />
+                <Layer texture={texture} count={700} radius={5} color={c3} size={0.04} speed={0.045} opacity={0.7} />
             </ParallaxRig>
         </Canvas>
     );

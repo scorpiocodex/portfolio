@@ -89,13 +89,13 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
     return (
         <div ref={containerRef}>
             <motion.div
-                className="rounded-xl border border-border overflow-hidden bg-[#0D1117] shadow-2xl"
+                className="rounded-xl border border-border overflow-hidden bg-bg shadow-2xl"
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
                 {/* Title bar */}
-                <div className="flex items-center gap-2 px-4 py-3 bg-[#161B22] border-b border-border/50">
+                <div className="flex items-center gap-2 px-4 py-3 bg-surface border-b border-border/50">
                     <div className="flex gap-1.5">
                         <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
                         <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
@@ -149,10 +149,10 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
                             {step.command && (
                                 <div className="flex items-center gap-2">
                                     <span style={{ color: accentColor }}>$</span>
-                                    <span className="text-[#E6EDF3]">{step.command}</span>
+                                    <span className="text-text-primary">{step.command}</span>
                                 </div>
                             )}
-                            <pre className="text-[#8B949E] whitespace-pre mt-1 ml-0" style={{ fontFamily: TERMINAL_FONT }}>{step.output}</pre>
+                            <pre className="text-text-secondary whitespace-pre mt-1 ml-0" style={{ fontFamily: TERMINAL_FONT }}>{step.output}</pre>
                         </div>
                     ))}
 
@@ -160,7 +160,7 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
                     {isPlaying && currentStep >= 0 && typedCommand !== "" && (
                         <div className="flex items-center gap-2">
                             <span style={{ color: accentColor }}>$</span>
-                            <span className="text-[#E6EDF3]">{typedCommand}</span>
+                            <span className="text-text-primary">{typedCommand}</span>
                             <span
                                 className="inline-block w-[7px] h-[15px] animate-pulse"
                                 style={{ backgroundColor: accentColor }}
@@ -182,7 +182,7 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
 
                 {/* Progress bar */}
                 {isPlaying && (
-                    <div className="h-[2px] bg-[#161B22]">
+                    <div className="h-[2px] bg-surface">
                         <motion.div
                             className="h-full"
                             style={{ backgroundColor: accentColor }}

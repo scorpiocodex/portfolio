@@ -93,7 +93,7 @@ export default function Timeline() {
                   {/* Timeline dot */}
                   <div
                     aria-hidden="true"
-                    className="absolute left-[19.5px] md:left-[calc(50%-7px)] top-6 w-[14px] h-[14px] rounded-full bg-bg border-2 border-accent z-10 shadow-[0_0_12px_rgba(88,166,255,0.4)]"
+                    className="absolute left-[19.5px] md:left-[calc(50%-7px)] top-6 w-[14px] h-[14px] rounded-full bg-bg border-2 border-accent z-10 shadow-[0_0_12px_rgb(var(--c-accent)/0.4)]"
                   />
 
                   {/* Content card */}

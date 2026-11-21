@@ -123,7 +123,7 @@ export default function EasterEgg() {
                         role="dialog"
                         aria-modal="true"
                         aria-label="Hidden terminal"
-                        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-2xl bg-surface border border-border shadow-2xl rounded-lg overflow-hidden z-[101] font-jetbrains-mono flex flex-col h-[50vh]"
+                        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-2xl bg-surface border border-border shadow-2xl rounded-lg overflow-hidden z-[101] font-mono flex flex-col h-[50vh]"
                     >
                         {/* Terminal Header */}
                         <div className="flex items-center px-4 py-2 bg-border/30 border-b border-border">

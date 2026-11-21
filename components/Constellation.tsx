@@ -1,5 +1,6 @@
 "use client";
 
+import { THEME_CHANGE_EVENT, readThemeRgb } from "@/lib/theme";
 import { useEffect, useRef } from "react";
 
 export default function Constellation() {
@@ -15,6 +16,8 @@ export default function Constellation() {
         let animationFrameId: number;
         let width = 0;
         let height = 0;
+        // Particle colour follows the active theme's accent.
+        let [ar, ag, ab] = readThemeRgb("accent");
 
         const init = () => {
             width = canvas.width = window.innerWidth;
@@ -36,8 +39,7 @@ export default function Constellation() {
         const draw = () => {
             ctx.clearRect(0, 0, width, height);
 
-            // Particle color (matching Tailwind accent #58A6FF)
-            ctx.fillStyle = "rgba(88, 166, 255, 0.6)";
+            ctx.fillStyle = `rgba(${ar}, ${ag}, ${ab}, 0.6)`;
 
             // Update and draw particles
             particles.forEach((p) => {
@@ -65,7 +67,7 @@ export default function Constellation() {
                         ctx.beginPath();
                         // Opacity scales based on distance
                         const opacity = 0.15 - (dist / maxDistance) * 0.15;
-                        ctx.strokeStyle = `rgba(88, 166, 255, ${opacity})`;
+                        ctx.strokeStyle = `rgba(${ar}, ${ag}, ${ab}, ${opacity})`;
                         ctx.lineWidth = 0.8;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -96,9 +98,16 @@ export default function Constellation() {
             if (prefersReduced) draw();
         };
 
+        const handleTheme = () => {
+            [ar, ag, ab] = readThemeRgb("accent");
+            if (prefersReduced) draw();
+        };
+
         window.addEventListener("resize", handleResize);
+        window.addEventListener(THEME_CHANGE_EVENT, handleTheme);
         return () => {
             window.removeEventListener("resize", handleResize);
+            window.removeEventListener(THEME_CHANGE_EVENT, handleTheme);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);

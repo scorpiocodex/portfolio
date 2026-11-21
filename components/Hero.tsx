@@ -133,7 +133,7 @@ export default function Hero() {
             {/* Avatar & Status chip */}
             <div className="flex items-center gap-4 mb-7">
               <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-full border border-border/80 overflow-hidden bg-surface p-0.5 card-glow">
-                <div className="relative w-full h-full rounded-full overflow-hidden bg-[#0D1117]">
+                <div className="relative w-full h-full rounded-full overflow-hidden bg-bg">
                   <Image
                     src="/avatar.png"
                     alt="San Shibu — Python Full-Stack Developer avatar"
