@@ -33,12 +33,11 @@ function msDelay(ms: number): Promise<void> {
 }
 
 export default function Hero() {
-  const [charCounts, setCharCounts] = useState<number[]>(
-    () => new Array(TERMINAL_LINES.length).fill(0)
+  const [charCounts, setCharCounts] = useState<number[]>(() =>
+    new Array(TERMINAL_LINES.length).fill(0),
   );
   const [activeLineIdx, setActiveLineIdx] = useState(-1);
   const [typingDone, setTypingDone] = useState(false);
-
 
   useEffect(() => {
     // The terminal typewriter is a one-time, non-spatial character reveal (no
@@ -60,10 +59,7 @@ export default function Hero() {
 
         for (let c = 1; c <= line.text.length; c++) {
           if (cancelled) return;
-          const speed =
-            line.type === "command"
-              ? 38 + Math.random() * 28
-              : 11 + Math.random() * 7;
+          const speed = line.type === "command" ? 38 + Math.random() * 28 : 11 + Math.random() * 7;
           await msDelay(speed);
           setCharCounts((prev) => {
             const next = [...prev];
@@ -83,7 +79,9 @@ export default function Hero() {
     };
 
     run();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -98,7 +96,6 @@ export default function Hero() {
 
       <div className="relative max-w-content mx-auto px-6 w-full py-20 lg:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-14 lg:gap-12 items-center">
-
           {/* ── Left: Text ──────────────────────────────────────── */}
           <div className="hero-rise" style={{ "--rise-delay": "0.15s" } as React.CSSProperties}>
             {/* Avatar & Status chip */}
@@ -136,8 +133,7 @@ export default function Hero() {
             <h1 className="font-space-grotesk text-[2rem] sm:text-[2.6rem] md:text-[3.2rem] lg:text-[3.6rem] xl:text-[4rem] font-bold text-text-primary leading-[1.08] tracking-tight mb-7">
               Building{" "}
               <span className="gradient-text-animated pb-1 whitespace-nowrap">Full-Stack</span>
-              <br className="hidden sm:block" />
-              {" "}Apps & Dev Tools.
+              <br className="hidden sm:block" /> Apps & Dev Tools.
             </h1>
 
             {/* Subheading */}
@@ -201,7 +197,6 @@ export default function Hero() {
 
               {/* Terminal window */}
               <div className="relative rounded-card border border-border bg-bg/80 backdrop-blur-sm overflow-hidden terminal-scanlines">
-
                 {/* Window chrome */}
                 <div className="flex items-center gap-1.5 px-4 py-3 border-b border-surface-2 bg-surface">
                   <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
@@ -252,7 +247,6 @@ export default function Hero() {
               <div className="h-px flex-1 bg-border/40" />
             </div>
           </div>
-
         </div>
       </div>
 

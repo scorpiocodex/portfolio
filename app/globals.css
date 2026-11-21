@@ -119,7 +119,13 @@ body {
 /* ─── Section Divider ────────────────────────────────────────────────────── */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border) 20%,
+    var(--border) 80%,
+    transparent
+  );
 }
 
 /* ─── Glow Hover Cards ───────────────────────────────────────────────────────

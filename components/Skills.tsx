@@ -37,7 +37,10 @@ function SkillCard({ group }: { group: SkillGroup }) {
       style={{ "--hover-color": group.color } as CSSProperties}
     >
       {/* Top accent */}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px]" style={{ background: group.color }} />
+      <div
+        className="absolute top-0 left-0 right-0 h-[1.5px]"
+        style={{ background: group.color }}
+      />
 
       {/* Category header */}
       <div className="mb-5">

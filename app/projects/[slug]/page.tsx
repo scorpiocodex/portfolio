@@ -5,41 +5,41 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 interface Props {
-    params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-    return getAllSlugs().map((slug) => ({ slug }));
+  return getAllSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { slug } = await params;
-    const project = getProjectBySlug(slug);
-    if (!project) return {};
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
+  if (!project) return {};
 
-    return {
-        title: `${project.name} — ${project.tagline} | ${SITE.name}`,
-        description: project.description,
-        // Without this the root layout's canonical ("/") is inherited, telling search
-        // engines that every case study is a duplicate of the homepage.
-        alternates: { canonical: `/projects/${project.slug}` },
-        openGraph: {
-            title: `${project.name} — ${project.tagline}`,
-            description: project.description,
-            url: `${SITE.url}/projects/${project.slug}`,
-            siteName: `${SITE.name} — Portfolio`,
-            type: "article",
-        },
-    };
+  return {
+    title: `${project.name} — ${project.tagline} | ${SITE.name}`,
+    description: project.description,
+    // Without this the root layout's canonical ("/") is inherited, telling search
+    // engines that every case study is a duplicate of the homepage.
+    alternates: { canonical: `/projects/${project.slug}` },
+    openGraph: {
+      title: `${project.name} — ${project.tagline}`,
+      description: project.description,
+      url: `${SITE.url}/projects/${project.slug}`,
+      siteName: `${SITE.name} — Portfolio`,
+      type: "article",
+    },
+  };
 }
 
 export default async function ProjectPage({ params }: Props) {
-    const { slug } = await params;
-    const project = getProjectBySlug(slug);
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
 
-    if (!project) {
-        notFound();
-    }
+  if (!project) {
+    notFound();
+  }
 
-    return <ProjectDetail project={project} />;
+  return <ProjectDetail project={project} />;
 }

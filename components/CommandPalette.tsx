@@ -238,12 +238,7 @@ export default function CommandPalette() {
                 </div>
               ) : (
                 Object.entries(groups).map(([category, cmds]) => (
-                  <div
-                    key={category}
-                    role="group"
-                    aria-label={category}
-                    className="mb-4 last:mb-0"
-                  >
+                  <div key={category} role="group" aria-label={category} className="mb-4 last:mb-0">
                     <div
                       aria-hidden="true"
                       className="text-[10px] uppercase tracking-widest text-text-secondary px-3 py-1.5 mb-1"

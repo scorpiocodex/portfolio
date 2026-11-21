@@ -50,7 +50,13 @@ export function FadeInStagger({
   );
 }
 
-export function FadeInItem({ children, className }: { children: React.ReactNode; className?: string }) {
+export function FadeInItem({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <motion.div
       className={className}

@@ -44,7 +44,15 @@ function PythonIcon({ className }: IconProps) {
 
 function RestApiIcon({ className }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M17 8l4 4-4 4M7 8L3 12l4 4" />
       <path d="M14 4l-4 16" />
     </svg>
@@ -53,7 +61,15 @@ function RestApiIcon({ className }: IconProps) {
 
 function SqlIcon({ className }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <ellipse cx="12" cy="5" rx="9" ry="3" />
       <path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3" />
       <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />

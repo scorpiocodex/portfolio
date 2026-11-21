@@ -9,18 +9,21 @@ describe("project data", () => {
     expect(new Set(PROJECTS.map((p) => p.number)).size).toBe(PROJECTS.length);
   });
 
-  it.each(PROJECTS.map((p) => [p.slug, p] as const))("%s is complete and well-formed", (_slug, p) => {
-    expect(p.accentColor).toMatch(/^#[0-9A-Fa-f]{6}$/);
-    expect(p.github).toMatch(/^https:\/\/github\.com\/scorpiocodex\//);
-    if (p.pypi) expect(p.pypi).toMatch(/^https:\/\/pypi\.org\/project\//);
-    expect(p.features.length).toBeGreaterThan(0);
-    expect(p.designDecisions.length).toBeGreaterThan(0);
-    // The detail page splits architecture items on " — " into title + description.
-    for (const item of p.architecture) expect(item).toContain(" — ");
-    for (const step of p.terminalDemo ?? []) expect(step.output.length).toBeGreaterThan(0);
-    // A demo must say where its output comes from.
-    if (p.terminalDemo) expect(p.terminalDemoNote).toBeTruthy();
-  });
+  it.each(PROJECTS.map((p) => [p.slug, p] as const))(
+    "%s is complete and well-formed",
+    (_slug, p) => {
+      expect(p.accentColor).toMatch(/^#[0-9A-Fa-f]{6}$/);
+      expect(p.github).toMatch(/^https:\/\/github\.com\/scorpiocodex\//);
+      if (p.pypi) expect(p.pypi).toMatch(/^https:\/\/pypi\.org\/project\//);
+      expect(p.features.length).toBeGreaterThan(0);
+      expect(p.designDecisions.length).toBeGreaterThan(0);
+      // The detail page splits architecture items on " — " into title + description.
+      for (const item of p.architecture) expect(item).toContain(" — ");
+      for (const step of p.terminalDemo ?? []) expect(step.output.length).toBeGreaterThan(0);
+      // A demo must say where its output comes from.
+      if (p.terminalDemo) expect(p.terminalDemoNote).toBeTruthy();
+    },
+  );
 
   it("looks projects up by slug", () => {
     expect(getProjectBySlug("nyxora")?.name).toBe("Nyxora");

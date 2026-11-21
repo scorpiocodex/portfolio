@@ -33,9 +33,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Environment variables
 
-| Variable     | Required | Purpose                                                                 |
-| ------------ | -------- | ----------------------------------------------------------------------- |
-| `GITHUB_PAT` | No       | Token for the GitHub GraphQL API (pinned repos + contribution graph).   |
+| Variable     | Required | Purpose                                                               |
+| ------------ | -------- | --------------------------------------------------------------------- |
+| `GITHUB_PAT` | No       | Token for the GitHub GraphQL API (pinned repos + contribution graph). |
 
 Create a **fine-grained personal access token with no extra permissions** (public data only) and
 set it in `.env.local` and in the Vercel project settings. Without it, the GitHub section shows the
@@ -44,14 +44,14 @@ placeholder activity.
 
 ## Scripts
 
-| Script                 | What it does                          |
-| ---------------------- | ------------------------------------- |
-| `npm run dev`          | Start the dev server                  |
-| `npm run build`        | Production build                      |
-| `npm run lint`         | ESLint                                |
-| `npm run typecheck`    | TypeScript, no emit                   |
-| `npm test`             | Unit tests (Vitest)                   |
-| `npm run format`       | Format with Prettier                  |
+| Script              | What it does         |
+| ------------------- | -------------------- |
+| `npm run dev`       | Start the dev server |
+| `npm run build`     | Production build     |
+| `npm run lint`      | ESLint               |
+| `npm run typecheck` | TypeScript, no emit  |
+| `npm test`          | Unit tests (Vitest)  |
+| `npm run format`    | Format with Prettier |
 
 ## Content
 

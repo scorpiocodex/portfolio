@@ -129,7 +129,9 @@ export default function Timeline() {
                             aria-hidden="true"
                             className="mt-[7px] w-1 h-1 rounded-full bg-accent shrink-0"
                           />
-                          <span className="text-[13px] text-text-secondary leading-[1.65]">{h}</span>
+                          <span className="text-[13px] text-text-secondary leading-[1.65]">
+                            {h}
+                          </span>
                         </li>
                       ))}
                     </ul>

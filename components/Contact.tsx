@@ -1,7 +1,14 @@
 import { RESUME, SOCIAL } from "@/lib/constants";
 import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
-import { DownloadIcon, EmailIcon, ExternalLinkIcon, GithubIcon, LinkedInIcon, LocationIcon } from "./icons";
+import {
+  DownloadIcon,
+  EmailIcon,
+  ExternalLinkIcon,
+  GithubIcon,
+  LinkedInIcon,
+  LocationIcon,
+} from "./icons";
 import Magnetic from "./Magnetic";
 
 const CONTACT_LINKS = [
@@ -43,7 +50,6 @@ export default function Contact() {
   return (
     <section id="contact" className="py-24 lg:py-32">
       <div className="max-w-content mx-auto px-6">
-
         {/* Header */}
         <FadeIn className="mb-16">
           <AnimatedSectionNumber number="07" label="Contact" />
@@ -53,7 +59,6 @@ export default function Contact() {
         </FadeIn>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12 items-start">
-
           {/* Left: CTA + message */}
           <FadeIn delay={0.05}>
             <div className="max-w-lg">
@@ -105,7 +110,10 @@ export default function Contact() {
                     >
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: `color-mix(in srgb, ${link.color} 8%, transparent)`, color: link.color }}
+                        style={{
+                          backgroundColor: `color-mix(in srgb, ${link.color} 8%, transparent)`,
+                          color: link.color,
+                        }}
                       >
                         {link.icon}
                       </div>
@@ -113,10 +121,7 @@ export default function Contact() {
                         <div className="font-mono text-[10px] text-text-secondary uppercase tracking-widest mb-0.5">
                           {link.label}
                         </div>
-                        <div
-                          className="text-sm font-medium truncate"
-                          style={{ color: link.color }}
-                        >
+                        <div className="text-sm font-medium truncate" style={{ color: link.color }}>
                           {link.value}
                         </div>
                       </div>
@@ -128,7 +133,10 @@ export default function Contact() {
                     <div className="flex items-center gap-4 p-4 rounded-card border border-border bg-surface/30 backdrop-blur-sm">
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: `color-mix(in srgb, ${link.color} 8%, transparent)`, color: link.color }}
+                        style={{
+                          backgroundColor: `color-mix(in srgb, ${link.color} 8%, transparent)`,
+                          color: link.color,
+                        }}
                       >
                         {link.icon}
                       </div>
@@ -136,10 +144,7 @@ export default function Contact() {
                         <div className="font-mono text-[10px] text-text-secondary uppercase tracking-widest mb-0.5">
                           {link.label}
                         </div>
-                        <div
-                          className="text-sm font-medium"
-                          style={{ color: link.color }}
-                        >
+                        <div className="text-sm font-medium" style={{ color: link.color }}>
                           {link.value}
                         </div>
                       </div>

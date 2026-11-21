@@ -10,7 +10,6 @@ export default function GitHub({ data }: { data: GitHubData }) {
   return (
     <section id="github" className="py-24 lg:py-32">
       <div className="max-w-content mx-auto px-6">
-
         {/* Header */}
         <FadeIn className="mb-16">
           <AnimatedSectionNumber number="06" label="Open Source" />

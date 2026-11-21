@@ -26,7 +26,6 @@ export default function Philosophy() {
   return (
     <section id="philosophy" className="py-24 lg:py-32">
       <div className="max-w-content mx-auto px-6">
-
         {/* Header */}
         <FadeIn className="mb-14">
           <AnimatedSectionNumber number="05" label="Philosophy" />
