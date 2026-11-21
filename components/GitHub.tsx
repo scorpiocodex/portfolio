@@ -5,12 +5,11 @@ import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 import { ExternalLinkIcon, GithubIcon, StarIcon } from "./icons";
 
 export default function GitHub({ data }: { data: GitHubData }) {
-  const { user, repos, contributions } = data;
+  const { user, repos, reposSource, contributions } = data;
 
   return (
     <section id="github" className="py-24 lg:py-32">
       <div className="max-w-content mx-auto px-6">
-
         {/* Header */}
         <FadeIn className="mb-16">
           <AnimatedSectionNumber number="06" label="Open Source" />
@@ -64,7 +63,7 @@ export default function GitHub({ data }: { data: GitHubData }) {
         {/* Pinned repos label */}
         <FadeIn delay={0.08} className="mb-4">
           <span className="font-mono text-[11px] text-text-secondary tracking-widest uppercase">
-            Pinned Repositories
+            {reposSource === "pinned" ? "Pinned Repositories" : "Featured Repositories"}
           </span>
         </FadeIn>
 
@@ -77,8 +76,8 @@ export default function GitHub({ data }: { data: GitHubData }) {
                   href={repo.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col p-5 h-full rounded-card border border-border bg-surface/30 backdrop-blur-sm card-glow hover:border-[var(--r-accent)]/40 transition-all duration-300"
-                  style={{ "--r-accent": repo.accent } as React.CSSProperties}
+                  className="group flex flex-col p-5 h-full rounded-card border border-border bg-surface/30 backdrop-blur-sm card-glow"
+                  style={{ "--hover-color": repo.accent } as React.CSSProperties}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -98,19 +97,27 @@ export default function GitHub({ data }: { data: GitHubData }) {
                   </p>
 
                   <div className="flex items-center gap-3 mt-auto">
-                    <div className="flex items-center gap-1.5">
-                      <span
-                        className="w-2.5 h-2.5 rounded-full"
-                        style={{ backgroundColor: repo.langColor }}
-                      />
-                      <span className="font-mono text-[11px] text-text-secondary">
-                        {repo.language}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-text-secondary/60">
-                      <StarIcon className="w-3 h-3" />
-                      <span className="font-mono text-[10px]">{repo.stars}</span>
-                    </div>
+                    {repo.language && (
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          aria-hidden="true"
+                          className="w-2.5 h-2.5 rounded-full"
+                          style={{ backgroundColor: repo.langColor }}
+                        />
+                        <span className="font-mono text-[11px] text-text-secondary">
+                          {repo.language}
+                        </span>
+                      </div>
+                    )}
+                    {repo.stars !== null && (
+                      <div className="flex items-center gap-1 text-text-secondary">
+                        <StarIcon className="w-3 h-3" />
+                        <span className="font-mono text-[10px]">
+                          <span className="sr-only">Stars: </span>
+                          {repo.stars}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </a>
               </FadeInItem>
@@ -121,7 +128,7 @@ export default function GitHub({ data }: { data: GitHubData }) {
         {/* Contribution graph */}
         <FadeIn delay={0.1} className="mt-8">
           <div className="p-5 rounded-card border border-border bg-surface/30">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 mb-4">
               <span className="font-mono text-[11px] text-text-secondary tracking-widest uppercase">
                 Contribution Activity (Half Year)
               </span>
@@ -135,17 +142,34 @@ export default function GitHub({ data }: { data: GitHubData }) {
               </a>
             </div>
 
-            <div className="overflow-x-auto pb-1">
-              <ContributionGrid weeks={contributions} />
-            </div>
+            {contributions ? (
+              <>
+                <div className="overflow-x-auto pb-1">
+                  <ContributionGrid weeks={contributions} />
+                </div>
 
-            <div className="flex items-center gap-2 mt-4 justify-end">
-              <span className="font-mono text-[10px] text-text-secondary/50">Less</span>
-              {["#161B22", "#0E4429", "#006D32", "#26A641", "#39D353"].map((c) => (
-                <div key={c} className="w-3 h-3 rounded-sm" style={{ backgroundColor: c }} />
-              ))}
-              <span className="font-mono text-[10px] text-text-secondary/50">More</span>
-            </div>
+                <div aria-hidden="true" className="flex items-center gap-2 mt-4 justify-end">
+                  <span className="font-mono text-[10px] text-text-secondary">Less</span>
+                  {["var(--surface)", "#0E4429", "#006D32", "#26A641", "#39D353"].map((c) => (
+                    <div key={c} className="w-3 h-3 rounded-sm" style={{ backgroundColor: c }} />
+                  ))}
+                  <span className="font-mono text-[10px] text-text-secondary">More</span>
+                </div>
+              </>
+            ) : (
+              <p className="font-mono text-[12px] text-text-secondary leading-relaxed py-6 text-center">
+                Live contribution data is unavailable right now.{" "}
+                <a
+                  href={user.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-glow transition-colors"
+                >
+                  See the full activity on GitHub
+                </a>
+                .
+              </p>
+            )}
           </div>
         </FadeIn>
       </div>
@@ -154,13 +178,22 @@ export default function GitHub({ data }: { data: GitHubData }) {
 }
 
 function ContributionGrid({ weeks }: { weeks: ContributionWeek[] }) {
+  const total = weeks.reduce(
+    (sum, week) => sum + week.contributionDays.reduce((s, day) => s + day.contributionCount, 0),
+    0,
+  );
+
   return (
-    <div className="flex gap-[3px]">
+    <div
+      role="img"
+      aria-label={`${total} contributions on GitHub over the last ${weeks.length} weeks`}
+      className="flex gap-[3px]"
+    >
       {weeks.map((week, weekIdx) => (
         <div key={weekIdx} className="flex flex-col gap-[3px]">
           {week.contributionDays.map((day, dayIdx) => {
-            // Use GitHub's standard colors or the fallback colors from the payload
-            const bgColor = day.color === "#ebedf0" ? "#161b22" : day.color;
+            // GitHub's empty-cell colour is near-white; swap it for the site surface colour.
+            const bgColor = day.color === "#ebedf0" ? "var(--surface)" : day.color;
             return (
               <div
                 key={dayIdx}

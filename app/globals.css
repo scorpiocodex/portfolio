@@ -2,36 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Root Variables ─────────────────────────────────────────────────────── */
+/* ─── Theme tokens ───────────────────────────────────────────────────────────
+   Source of truth: space-separated RGB channels (--c-*), consumed by Tailwind
+   (`rgb(var(--c-bg) / <alpha-value>)`). The --bg / --accent / … variables below
+   are derived conveniences for plain CSS. Switching themes only swaps channels. */
 :root {
-  --bg: #0d1117;
-  --surface: #161b22;
-  --border: #30363d;
-  --accent: #58a6ff;
-  --accent-purple: #7c3aed;
-  --glow: #00e5ff;
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --success: #3fb950;
+  --c-bg: 13 17 23;
+  --c-surface: 22 27 34;
+  --c-surface-2: 33 38 45;
+  --c-border: 48 54 61;
+  --c-accent: 88 166 255;
+  --c-accent-purple: 124 58 237;
+  --c-glow: 0 229 255;
+  --c-text-primary: 230 237 243;
+  --c-text-secondary: 139 148 158;
+  --c-success: 63 185 80;
 }
 
 [data-theme="deep-ocean"] {
-  --bg: #0b1521;
-  --surface: #101e2e;
-  --border: #1e334a;
-  --accent: #2dd4bf;
-  --accent-purple: #3b82f6;
-  --glow: #06b6d4;
-  --text-primary: #f0f9ff;
-  --text-secondary: #94a3b8;
-  --success: #10b981;
+  --c-bg: 11 21 33;
+  --c-surface: 16 30 46;
+  --c-surface-2: 22 42 64;
+  --c-border: 30 51 74;
+  --c-accent: 45 212 191;
+  --c-accent-purple: 59 130 246;
+  --c-glow: 6 182 212;
+  --c-text-primary: 240 249 255;
+  --c-text-secondary: 148 163 184;
+  --c-success: 16 185 129;
+}
+
+:root,
+[data-theme="deep-ocean"] {
+  --bg: rgb(var(--c-bg));
+  --surface: rgb(var(--c-surface));
+  --surface-2: rgb(var(--c-surface-2));
+  --border: rgb(var(--c-border));
+  --accent: rgb(var(--c-accent));
+  --accent-purple: rgb(var(--c-accent-purple));
+  --glow: rgb(var(--c-glow));
+  --text-primary: rgb(var(--c-text-primary));
+  --text-secondary: rgb(var(--c-text-secondary));
+  --success: rgb(var(--c-success));
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 72px;
-  /* offset for fixed navbar */
+  scroll-padding-top: 72px; /* offset for fixed navbar */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -40,15 +58,14 @@ html {
 body {
   background-color: var(--bg);
   color: var(--text-primary);
-  background-image:
-    radial-gradient(circle, #21262d 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--surface-2) 1px, transparent 1px);
   background-size: 28px 28px;
   background-position: 0 0;
 }
 
 /* ─── Selection ──────────────────────────────────────────────────────────── */
 ::selection {
-  background: rgba(88, 166, 255, 0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   color: var(--text-primary);
 }
 
@@ -62,7 +79,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #30363d;
+  background: var(--border);
   border-radius: 3px;
 }
 
@@ -70,22 +87,20 @@ body {
   background: var(--accent);
 }
 
-/* ─── Typography Utilities ───────────────────────────────────────────────── */
-.font-space-grotesk {
-  font-family: var(--font-space-grotesk), sans-serif;
-}
+/* Hide the scrollbar on inner scroll regions while keeping them scrollable. */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 
-.font-inter {
-  font-family: var(--font-inter), sans-serif;
-}
-
-.font-mono {
-  font-family: var(--font-jetbrains-mono), monospace;
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* ─── Cursor Blink ───────────────────────────────────────────────────────── */
 @keyframes blink {
-
   0%,
   50% {
     opacity: 1;
@@ -104,17 +119,29 @@ body {
 /* ─── Section Divider ────────────────────────────────────────────────────── */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, #30363d 20%, #30363d 80%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border) 20%,
+    var(--border) 80%,
+    transparent
+  );
 }
 
-/* ─── Glow Hover Cards ───────────────────────────────────────────────────── */
+/* ─── Glow Hover Cards ───────────────────────────────────────────────────────
+   Set `--hover-color` on an element to tint its hover glow (defaults to accent). */
 .card-glow {
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .card-glow:hover {
-  box-shadow: 0 0 0 1px #58a6ff33, 0 8px 40px rgba(88, 166, 255, 0.12);
-  border-color: rgba(88, 166, 255, 0.4);
+  --_hover: var(--hover-color, var(--accent));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--_hover) 20%, transparent),
+    0 8px 40px color-mix(in srgb, var(--_hover) 12%, transparent);
+  border-color: color-mix(in srgb, var(--_hover) 40%, transparent);
 }
 
 /* ─── Terminal Scanlines ─────────────────────────────────────────────────── */
@@ -122,11 +149,13 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(0deg,
-      transparent,
-      transparent 3px,
-      rgba(0, 0, 0, 0.03) 3px,
-      rgba(0, 0, 0, 0.03) 4px);
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.03) 3px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
   pointer-events: none;
   border-radius: inherit;
 }
@@ -135,38 +164,6 @@ body {
 .accent-line {
   height: 2px;
   background: linear-gradient(90deg, var(--accent), var(--glow), var(--accent-purple));
-}
-
-/* ─── Skeleton Pulse ─────────────────────────────────────────────────────── */
-@keyframes pulse-subtle {
-
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
-
-.pulse-subtle {
-  animation: pulse-subtle 2s ease-in-out infinite;
-}
-
-/* ─── Tag / Badge ────────────────────────────────────────────────────────── */
-.tech-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  border-radius: 6px;
-  background: rgba(88, 166, 255, 0.08);
-  border: 1px solid rgba(88, 166, 255, 0.18);
-  color: #58a6ff;
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.02em;
 }
 
 /* ─── Nav Active Underline ───────────────────────────────────────────────── */
@@ -191,11 +188,13 @@ body {
 
 /* ─── Animated Gradient Text ─────────────────────────────────────────────── */
 .gradient-text-animated {
-  background: linear-gradient(to right,
-      var(--accent),
-      var(--glow),
-      var(--accent-purple),
-      var(--accent));
+  background: linear-gradient(
+    to right,
+    var(--accent),
+    var(--glow),
+    var(--accent-purple),
+    var(--accent)
+  );
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -218,34 +217,52 @@ body {
   perspective: 1000px;
 }
 
-/* ─── Glass / Depth ──────────────────────────────────────────────────────── */
-.glass {
-  background: color-mix(in srgb, var(--surface) 55%, transparent);
-  backdrop-filter: blur(12px) saturate(1.1);
-  -webkit-backdrop-filter: blur(12px) saturate(1.1);
-  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
-}
-
 /* ─── Minimal accent glow (per design system: subtle only) ───────────────── */
 .text-glow-accent {
   text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
-/* ─── Encrypted / cyberpunk accents (used sparingly) ─────────────────────── */
-@keyframes glitch-shift {
-  0%, 92%, 100% { transform: translate(0, 0); }
-  93% { transform: translate(-1px, 1px); }
-  95% { transform: translate(1px, -1px); }
-  97% { transform: translate(-1px, 0); }
+/* ─── Intro gate ─────────────────────────────────────────────────────────────
+   <html data-intro="playing"> is set before first paint (app/layout.tsx) when the intro
+   should run. The overlay is always in the DOM but only displayed during that window, and
+   the hero entrance is held (paused at its first, transparent frame) until it ends. */
+.intro-overlay {
+  display: none;
 }
 
-.glitch {
-  animation: glitch-shift 6s steps(1) infinite;
+html[data-intro="playing"] .intro-overlay {
+  display: flex;
 }
 
+html[data-intro="playing"] .hero-rise {
+  animation-play-state: paused;
+}
+
+/* Hero entrance: pure CSS, so server-rendered content is visible without JS. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-rise {
+  animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--rise-delay, 0s);
+}
+
+/* ─── Intro overlay bar + scanlines ──────────────────────────────────────── */
 @keyframes intro-bar {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 .intro-bar {
@@ -256,18 +273,19 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(0deg,
-      transparent 0,
-      transparent 2px,
-      rgba(0, 0, 0, 0.045) 3px,
-      rgba(0, 0, 0, 0.045) 3px);
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.045) 3px,
+    rgba(0, 0, 0, 0.045) 3px
+  );
   pointer-events: none;
   border-radius: inherit;
 }
 
 /* ─── Reduced Motion ─────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-
   html {
     scroll-behavior: auto;
   }

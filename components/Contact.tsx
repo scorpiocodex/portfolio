@@ -1,9 +1,14 @@
-"use client";
-
 import { RESUME, SOCIAL } from "@/lib/constants";
 import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
-import { DownloadIcon, EmailIcon, ExternalLinkIcon, GithubIcon, LinkedInIcon, LocationIcon } from "./icons";
+import {
+  DownloadIcon,
+  EmailIcon,
+  ExternalLinkIcon,
+  GithubIcon,
+  LinkedInIcon,
+  LocationIcon,
+} from "./icons";
 import Magnetic from "./Magnetic";
 
 const CONTACT_LINKS = [
@@ -12,7 +17,7 @@ const CONTACT_LINKS = [
     value: SOCIAL.email,
     href: `mailto:${SOCIAL.email}`,
     icon: <EmailIcon className="w-4 h-4" />,
-    color: "#58A6FF",
+    color: "var(--accent)",
     external: false,
   },
   {
@@ -20,7 +25,7 @@ const CONTACT_LINKS = [
     value: SOCIAL.github.username,
     href: SOCIAL.github.url,
     icon: <GithubIcon className="w-4 h-4" />,
-    color: "#E6EDF3",
+    color: "var(--text-primary)",
     external: true,
   },
   {
@@ -28,7 +33,7 @@ const CONTACT_LINKS = [
     value: SOCIAL.linkedin.name,
     href: SOCIAL.linkedin.url,
     icon: <LinkedInIcon className="w-4 h-4" />,
-    color: "#0A66C2",
+    color: "#378FE9",
     external: true,
   },
   {
@@ -36,7 +41,7 @@ const CONTACT_LINKS = [
     value: SOCIAL.location,
     href: null,
     icon: <LocationIcon className="w-4 h-4" />,
-    color: "#8B949E",
+    color: "var(--text-secondary)",
     external: false,
   },
 ];
@@ -45,7 +50,6 @@ export default function Contact() {
   return (
     <section id="contact" className="py-24 lg:py-32">
       <div className="max-w-content mx-auto px-6">
-
         {/* Header */}
         <FadeIn className="mb-16">
           <AnimatedSectionNumber number="07" label="Contact" />
@@ -55,7 +59,6 @@ export default function Contact() {
         </FadeIn>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12 items-start">
-
           {/* Left: CTA + message */}
           <FadeIn delay={0.05}>
             <div className="max-w-lg">
@@ -63,9 +66,9 @@ export default function Contact() {
                 Let&apos;s build something great together.
               </p>
               <p className="text-text-secondary text-base leading-[1.75] mb-8">
-                Available for engineering roles, internships, and open source
-                collaboration. If you&apos;re working on web applications, developer
-                tooling, or interesting IT projects — let&apos;s connect.
+                Open to Python backend and full-stack developer roles, and to open-source
+                collaboration. If you&apos;re building with FastAPI, React, or LLM tooling —
+                let&apos;s connect.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Magnetic strength={20}>
@@ -107,7 +110,10 @@ export default function Contact() {
                     >
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: `${link.color}15`, color: link.color }}
+                        style={{
+                          backgroundColor: `color-mix(in srgb, ${link.color} 8%, transparent)`,
+                          color: link.color,
+                        }}
                       >
                         {link.icon}
                       </div>
@@ -115,10 +121,7 @@ export default function Contact() {
                         <div className="font-mono text-[10px] text-text-secondary uppercase tracking-widest mb-0.5">
                           {link.label}
                         </div>
-                        <div
-                          className="text-sm font-medium truncate"
-                          style={{ color: link.color }}
-                        >
+                        <div className="text-sm font-medium truncate" style={{ color: link.color }}>
                           {link.value}
                         </div>
                       </div>
@@ -130,7 +133,10 @@ export default function Contact() {
                     <div className="flex items-center gap-4 p-4 rounded-card border border-border bg-surface/30 backdrop-blur-sm">
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: `${link.color}15`, color: link.color }}
+                        style={{
+                          backgroundColor: `color-mix(in srgb, ${link.color} 8%, transparent)`,
+                          color: link.color,
+                        }}
                       >
                         {link.icon}
                       </div>
@@ -138,10 +144,7 @@ export default function Contact() {
                         <div className="font-mono text-[10px] text-text-secondary uppercase tracking-widest mb-0.5">
                           {link.label}
                         </div>
-                        <div
-                          className="text-sm font-medium"
-                          style={{ color: link.color }}
-                        >
+                        <div className="text-sm font-medium" style={{ color: link.color }}>
                           {link.value}
                         </div>
                       </div>

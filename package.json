@@ -6,15 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@gsap/react": "^2.1.2",
     "@react-three/fiber": "^9.6.1",
     "@vercel/analytics": "^2.0.1",
     "framer-motion": "^11.3.0",
-    "gsap": "^3.15.0",
-    "next": "16.2.10",
+    "next": "^16.4.6",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "three": "^0.169.0"
@@ -26,12 +28,17 @@
     "@types/three": "^0.169.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.10",
-    "postcss": "^8.5.16",
+    "eslint-config-next": "^16.4.6",
+    "postcss": "^8.5.33",
+    "prettier": "^3.10.1",
     "tailwindcss": "^3.4.6",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "vitest": "^5.1.1"
   },
   "overrides": {
     "postcss": "$postcss"
+  },
+  "engines": {
+    "node": ">=20.9"
   }
 }
