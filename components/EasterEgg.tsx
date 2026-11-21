@@ -1,5 +1,6 @@
 "use client";
 
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,6 +21,7 @@ export default function EasterEgg() {
     const [input, setInput] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const dialogRef = useRef<HTMLDivElement>(null);
     const previouslyFocused = useRef<HTMLElement | null>(null);
 
     // Konami Code listener
@@ -28,6 +30,13 @@ export default function EasterEgg() {
         const handleKeyDown = (e: KeyboardEvent) => {
             // Ignore if terminal is already open
             if (isOpen && e.key !== "Escape") return;
+
+            // Keys typed into a form field (e.g. the command palette search) aren't a Konami attempt.
+            const target = e.target as HTMLElement | null;
+            if (target?.closest("input, textarea, [contenteditable='true']")) {
+                index = 0;
+                return;
+            }
 
             if (e.key === "Escape") {
                 setIsOpen(false);
@@ -50,13 +59,16 @@ export default function EasterEgg() {
     }, [isOpen]);
 
     useEffect(() => {
-        if (isOpen) {
-            previouslyFocused.current = document.activeElement as HTMLElement;
-            setTimeout(() => inputRef.current?.focus(), 100);
-        } else {
-            previouslyFocused.current?.focus?.();
-        }
+        if (!isOpen) return;
+        previouslyFocused.current = document.activeElement as HTMLElement | null;
+        const timer = window.setTimeout(() => inputRef.current?.focus(), 100);
+        return () => {
+            window.clearTimeout(timer);
+            previouslyFocused.current?.focus?.({ preventScroll: true });
+        };
     }, [isOpen]);
+
+    useFocusTrap(dialogRef, isOpen);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -117,18 +129,20 @@ export default function EasterEgg() {
                         onClick={() => setIsOpen(false)}
                     />
                     <motion.div
+                        ref={dialogRef}
+                        tabIndex={-1}
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         role="dialog"
                         aria-modal="true"
                         aria-label="Hidden terminal"
-                        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-2xl bg-surface border border-border shadow-2xl rounded-lg overflow-hidden z-[101] font-mono flex flex-col h-[50vh]"
+                        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-2xl bg-surface border border-border shadow-2xl rounded-lg overflow-hidden z-[101] font-mono flex flex-col h-[50vh] outline-none"
                     >
                         {/* Terminal Header */}
                         <div className="flex items-center px-4 py-2 bg-border/30 border-b border-border">
                             <div className="flex gap-2 mr-4">
-                                <button onClick={() => setIsOpen(false)} className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors" />
+                                <button type="button" aria-label="Close terminal" onClick={() => setIsOpen(false)} className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors" />
                                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                             </div>
@@ -142,10 +156,6 @@ export default function EasterEgg() {
                             ref={scrollRef}
                             className="flex-1 p-4 overflow-y-auto text-sm text-text-primary"
                         >
-                            <div className="mb-4">
-                                <span className="text-accent">Welcome to v2.0.0. Type &apos;help&apos; to get started.</span>
-                            </div>
-
                             {history.map((line, i) => (
                                 <div key={i} className={`mb-1 ${line.startsWith('>') ? 'text-text-secondary' : 'text-text-primary'}`}>
                                     {line}
@@ -157,6 +167,7 @@ export default function EasterEgg() {
                                 <span className="text-accent">~</span>
                                 <input
                                     ref={inputRef}
+                                    aria-label="Terminal command"
                                     type="text"
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}

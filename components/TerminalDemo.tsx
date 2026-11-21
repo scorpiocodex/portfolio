@@ -31,6 +31,9 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
     const [isPlaying, setIsPlaying] = useState(false);
     const [hasPlayed, setHasPlayed] = useState(false);
     const [typedCommand, setTypedCommand] = useState("");
+    // Bumped on unmount so an in-flight replay stops instead of updating a dead component.
+    const runIdRef = useRef(0);
+    const playingRef = useRef(false);
 
     // Auto-scroll to bottom
     useEffect(() => {
@@ -39,8 +42,18 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
         }
     }, [displayedSteps, typedCommand]);
 
+    const cancelRun = useCallback(() => {
+        runIdRef.current += 1;
+    }, []);
+
+    // Leaving the page mid-demo cancels the replay.
+    useEffect(() => cancelRun, [cancelRun]);
+
     const playDemo = useCallback(async () => {
-        if (isPlaying) return;
+        if (playingRef.current) return;
+        playingRef.current = true;
+        const runId = ++runIdRef.current;
+        const cancelled = () => runIdRef.current !== runId;
         setIsPlaying(true);
         setHasPlayed(true);
         setDisplayedSteps([]);
@@ -55,8 +68,10 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
                 for (let j = 0; j <= step.command.length; j++) {
                     setTypedCommand(step.command.slice(0, j));
                     await sleep(30 + Math.random() * 40);
+                    if (cancelled()) return;
                 }
                 await sleep(300);
+                if (cancelled()) return;
             }
 
             // Show output
@@ -72,11 +87,13 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
 
             // Wait before next step
             await sleep(step.delay || 800);
+            if (cancelled()) return;
         }
 
         setCurrentStep(-1);
         setIsPlaying(false);
-    }, [steps, isPlaying]);
+        playingRef.current = false;
+    }, [steps]);
 
     // Auto-play on scroll into view
     useEffect(() => {
@@ -101,7 +118,7 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
                         <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
                         <span className="w-3 h-3 rounded-full bg-[#27C93F]" />
                     </div>
-                    <span className="flex-1 text-center font-mono text-[11px] text-text-secondary/50">
+                    <span className="flex-1 text-center font-mono text-[11px] text-text-secondary">
                         {title} — zsh
                     </span>
                     {/* Replay button */}
@@ -116,7 +133,7 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
                     )}
                     {isPlaying && (
                         <span className="font-mono text-[10px] px-2 py-0.5 text-accent/70">
-                            ● Recording
+                            ● Replaying
                         </span>
                     )}
                 </div>
@@ -130,8 +147,8 @@ export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Pro
                     {/* Welcome line */}
                     {!hasPlayed && !isPlaying && (
                         <div className="flex flex-col items-center justify-center h-[180px] gap-4">
-                            <div className="text-text-secondary/40 text-center text-sm">
-                                Interactive terminal demo
+                            <div className="text-text-secondary text-center text-sm">
+                                Scripted terminal demo
                             </div>
                             <button
                                 onClick={playDemo}
