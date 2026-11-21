@@ -21,7 +21,9 @@ export function AnimatedCounter({
   duration?: number;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  // Vertical-only margin: a bare "-50px" also shrinks the viewport sideways, so a narrow
+  // element sitting in the 24px mobile gutter would never count as visible.
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -50px 0px" });
   const reduceMotion = useReducedMotion();
 
   const springValue = useSpring(0, {
@@ -63,7 +65,7 @@ export function AnimatedCounter({
  */
 export function AnimatedSectionNumber({ number, label }: { number: string; label: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -80px 0px" });
 
   return (
     <motion.span

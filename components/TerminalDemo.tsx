@@ -22,7 +22,7 @@ const TERMINAL_FONT =
 export default function TerminalDemo({ steps, accentColor, title = "Demo" }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+  const isInView = useInView(containerRef, { once: true, margin: "0px 0px -100px 0px" });
 
   const [displayedSteps, setDisplayedSteps] = useState<
     { command?: string; output: string; typing: boolean }[]
