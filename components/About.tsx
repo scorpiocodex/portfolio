@@ -1,4 +1,3 @@
-import { SKILL_COUNT } from "@/lib/skills";
 import { AnimatedCounter, AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 
@@ -37,9 +36,9 @@ const credentials = [
 ];
 
 const stats = [
-  { value: 371, label: "Automated tests (BakeriQ)" },
-  { value: 2, label: "Packages on PyPI" },
-  { value: SKILL_COUNT, label: "Technologies" },
+  { value: 371, suffix: "", label: "Automated tests (BakeriQ)" },
+  { value: 2, suffix: "", label: "Packages on PyPI" },
+  { value: 100, suffix: "%", label: "Test coverage (ScorpioWatch)" },
 ];
 
 export default function About() {
@@ -67,8 +66,8 @@ export default function About() {
             </p>
             <p className="text-text-secondary text-[1.05rem] leading-[1.85] max-w-[540px]">
               The work spans FastAPI and PostgreSQL backends, React front ends, local-LLM
-              integration, and open-source Python tools published on PyPI. Every project ships with
-              automated tests and CI, because reliable software is the point.
+              integration, and open-source Python tools published on PyPI. BakeriQ has 371 automated
+              tests, and both PyPI tools ship through CI, because reliable software is the point.
             </p>
 
             {/* Credential row */}
@@ -91,6 +90,7 @@ export default function About() {
                 <div key={stat.label}>
                   <AnimatedCounter
                     value={stat.value}
+                    suffix={stat.suffix}
                     className="font-space-grotesk text-2xl font-bold text-text-primary"
                     duration={1.8}
                   />

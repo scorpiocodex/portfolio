@@ -14,8 +14,7 @@ export default function Projects() {
             Featured Work
           </h2>
           <p className="text-text-secondary text-base mt-3 max-w-lg leading-relaxed">
-            Two open-source Python tools, both published on PyPI — built with typed code, automated
-            tests, and CI-driven releases.
+            Two open-source Python tools published on PyPI, with CI checks behind both.
           </p>
         </FadeIn>
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { NAV_LINKS, SITE, SOCIAL } from "./constants";
 import { PROJECTS, getAllSlugs, getProjectBySlug } from "./projects";
-import { SKILL_COUNT, SKILL_GROUPS } from "./skills";
+import { SKILL_GROUPS } from "./skills";
 
 describe("project data", () => {
   it("has unique slugs and numbers", () => {
@@ -36,11 +36,6 @@ describe("skills", () => {
     const names = SKILL_GROUPS.map((g) => g.category);
     expect(new Set(names).size).toBe(names.length);
     for (const group of SKILL_GROUPS) expect(group.skills.length).toBeGreaterThan(0);
-  });
-
-  it("derives the technology count from the data", () => {
-    const distinct = new Set(SKILL_GROUPS.flatMap((g) => g.skills));
-    expect(SKILL_COUNT).toBe(distinct.size);
   });
 });
 
