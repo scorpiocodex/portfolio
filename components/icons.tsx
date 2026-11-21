@@ -48,14 +48,6 @@ export function StarIcon({ className }: { className?: string }) {
   );
 }
 
-export function PhoneIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 16 16" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M3.654 1.328a.678.678 0 00-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 004.168 6.608 17.569 17.569 0 006.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 00-.063-1.015l-2.307-1.794a.678.678 0 00-.58-.122l-2.19.547a1.745 1.745 0 01-1.657-.459L5.482 8.062a1.745 1.745 0 01-.46-1.657l.548-2.19a.678.678 0 00-.122-.58L3.654 1.328z" />
-    </svg>
-  );
-}
-
 export function DownloadIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" className={className} fill="currentColor" aria-hidden="true">
