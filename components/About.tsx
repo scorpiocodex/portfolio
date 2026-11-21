@@ -1,41 +1,51 @@
-"use client";
-
+import { SKILL_COUNT } from "@/lib/skills";
 import { AnimatedCounter, AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 
 const focusAreas = [
   {
-    label: "Full-Stack Web Development",
-    description: "Building end-to-end web applications with React on the frontend and Node.js on the backend.",
-    icon: "◈",
+    label: "Python Backend Development",
+    description:
+      "FastAPI and PostgreSQL services with Celery and Redis for background jobs, JWT authentication and Alembic migrations.",
   },
   {
-    label: "Python & Developer Tooling",
-    description: "Automating workflows and building CLI utilities — from file watchers to system automation scripts.",
-    icon: "◈",
+    label: "Full-Stack Applications",
+    description:
+      "React and Vite front ends — an owner dashboard and a customer ordering app — running alongside the backend in Docker Compose.",
   },
   {
-    label: "Database Engineering",
-    description: "Designing and querying relational data with SQL and PostgreSQL for production web applications.",
-    icon: "◈",
+    label: "LLM Integration",
+    description:
+      "A local Llama 3.2 model via Ollama turns free-text orders in English and Manglish into validated carts, at zero API cost.",
   },
   {
-    label: "Linux Systems & Automation",
-    description: "Native Linux development, command-line tooling, and hands-on system administration.",
-    icon: "◈",
+    label: "Open-Source Python Tooling",
+    description:
+      "ScorpioWatch and Nyxora, published on PyPI with CI, secret scanning and release automation through GitHub Actions.",
   },
   {
-    label: "REST API Design",
-    description: "Architecting clean, predictable REST APIs that connect frontend and backend systems reliably.",
-    icon: "◈",
+    label: "Testing & Quality",
+    description:
+      "pytest suites (371 tests on BakeriQ), mypy, and 26 architecture decision records to keep the design honest.",
   },
+];
+
+const credentials = [
+  { value: "B.I.T", label: "Victoria University, AU" },
+  { value: "Python + FastAPI", label: "Core stack" },
+  { value: "Kerala", label: "India" },
+];
+
+const stats = [
+  { value: 371, label: "Automated tests (BakeriQ)" },
+  { value: 2, label: "Packages on PyPI" },
+  { value: SKILL_COUNT, label: "Technologies" },
 ];
 
 export default function About() {
   return (
     <section id="about" className="py-24 lg:py-32 relative z-10">
       <div className="max-w-content mx-auto px-6">
-
         {/* Section header */}
         <FadeIn className="mb-16">
           <AnimatedSectionNumber number="02" label="About" />
@@ -45,36 +55,31 @@ export default function About() {
         </FadeIn>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12 lg:gap-16 items-start">
-
           {/* Left: Bio text */}
           <FadeIn delay={0.05}>
             <p className="text-text-secondary text-[1.05rem] leading-[1.85] mb-6 max-w-[540px]">
-              San Shibu is an IT professional and aspiring full-stack developer with a{" "}
+              San Shibu is a Python full-stack developer with a{" "}
               <span className="text-text-primary">Bachelor of Information Technology</span> from{" "}
-              <span className="text-text-primary">Victoria University, Melbourne</span>. Currently
-              completing an advanced{" "}
-              <span className="text-text-primary">Full-Stack Web Development</span> certification
-              at Scaler Academy (Feb 2026).
+              <span className="text-text-primary">Victoria University, Melbourne</span> and a{" "}
+              <span className="text-text-primary">Software & AI Engineering Program</span>{" "}
+              certificate from Scaler Academy (Nov 2026). During a full-stack internship at Digital
+              Mesh, San built BakeriQ — a WhatsApp-first bakery order platform — end to end.
             </p>
             <p className="text-text-secondary text-[1.05rem] leading-[1.85] max-w-[540px]">
-              His work spans full-stack web applications, Python automation tools, and hands-on
-              Linux system engineering. He applies strong analytical thinking and clean architecture
-              principles to build solutions that are reliable, maintainable, and user-focused.
+              The work spans FastAPI and PostgreSQL backends, React front ends, local-LLM
+              integration, and open-source Python tools published on PyPI. Every project ships with
+              automated tests and CI, because reliable software is the point.
             </p>
 
             {/* Credential row */}
             <div className="flex flex-wrap gap-8 mt-10 pt-8 border-t border-border/50">
-              {[
-                { value: "B.I.T", label: "Victoria University, AU" },
-                { value: "React + Python", label: "Core stack" },
-                { value: "Kerala", label: "India" },
-              ].map((stat) => (
-                <div key={stat.label}>
+              {credentials.map((item) => (
+                <div key={item.label}>
                   <div className="font-space-grotesk text-xl font-bold text-accent mb-1">
-                    {stat.value}
+                    {item.value}
                   </div>
                   <div className="font-mono text-[11px] text-text-secondary tracking-wide">
-                    {stat.label}
+                    {item.label}
                   </div>
                 </div>
               ))}
@@ -82,18 +87,14 @@ export default function About() {
 
             {/* Animated stats */}
             <div className="flex flex-wrap gap-10 mt-8 pt-8 border-t border-border/50">
-              {[
-                { value: 17, suffix: "+", label: "Technologies" },
-                { value: 400, suffix: "+", label: "Contributions" },
-              ].map((stat) => (
+              {stats.map((stat) => (
                 <div key={stat.label}>
                   <AnimatedCounter
                     value={stat.value}
-                    suffix={stat.suffix}
                     className="font-space-grotesk text-2xl font-bold text-text-primary"
                     duration={1.8}
                   />
-                  <div className="font-mono text-[10px] text-text-secondary/70 tracking-wider mt-1 uppercase">
+                  <div className="font-mono text-[10px] text-text-secondary tracking-wider mt-1 uppercase">
                     {stat.label}
                   </div>
                 </div>
@@ -107,8 +108,11 @@ export default function About() {
               {focusAreas.map((area) => (
                 <FadeInItem key={area.label}>
                   <div className="group flex items-start gap-3.5 p-4 rounded-card border border-border bg-surface/50 card-glow cursor-default">
-                    <span className="text-accent/60 text-xs mt-0.5 font-mono group-hover:text-accent transition-colors">
-                      {area.icon}
+                    <span
+                      aria-hidden="true"
+                      className="text-accent/60 text-xs mt-0.5 font-mono group-hover:text-accent transition-colors"
+                    >
+                      ◈
                     </span>
                     <div>
                       <div className="text-sm font-medium text-text-primary mb-0.5 group-hover:text-accent transition-colors duration-200">

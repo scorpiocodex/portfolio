@@ -1,6 +1,5 @@
 "use client";
 
-import { SOCIAL } from "@/lib/constants";
 import type { ProjectData } from "@/lib/projects";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -9,9 +8,12 @@ import { ExternalLinkIcon, GithubIcon } from "./icons";
 
 export default function ProjectDetail({ project }: { project: ProjectData }) {
     return (
-        <article className="min-h-screen bg-bg text-text-primary">
+        <main id="main-content" className="min-h-screen bg-bg text-text-primary">
             {/* Navigation bar */}
-            <nav className="fixed top-0 left-0 right-0 z-40 border-b border-border/50 bg-bg/80 backdrop-blur-md">
+            <nav
+                aria-label="Project navigation"
+                className="fixed top-0 left-0 right-0 z-40 border-b border-border/50 bg-bg/80 backdrop-blur-md"
+            >
                 <div className="max-w-content mx-auto px-6 h-14 flex items-center justify-between">
                     <Link
                         href="/#projects"
@@ -102,15 +104,17 @@ export default function ProjectDetail({ project }: { project: ProjectData }) {
                                     <GithubIcon className="w-4 h-4" />
                                     View on GitHub
                                 </a>
-                                <a
-                                    href={`${SOCIAL.github.url}/${project.name}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium border border-border rounded-card text-text-primary hover:border-accent hover:text-accent transition-all duration-200"
-                                >
-                                    <ExternalLinkIcon className="w-4 h-4" />
-                                    README
-                                </a>
+                                {project.pypi && (
+                                    <a
+                                        href={project.pypi}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium border border-border rounded-card text-text-primary hover:border-accent hover:text-accent transition-all duration-200"
+                                    >
+                                        <ExternalLinkIcon className="w-4 h-4" />
+                                        View on PyPI
+                                    </a>
+                                )}
                             </div>
                         </motion.div>
                     </div>
@@ -144,27 +148,34 @@ export default function ProjectDetail({ project }: { project: ProjectData }) {
                 </section>
 
                 {/* Terminal demo */}
-                <section className="py-16 sm:py-20 bg-surface/20">
-                    <div className="max-w-content mx-auto px-6">
-                        <motion.div
-                            initial={{ opacity: 0, y: 16 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <h2 className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase mb-6">
-                                Live Demo
-                            </h2>
-                            <div className="max-w-3xl">
-                                <TerminalDemo
-                                    steps={project.terminalDemo}
-                                    accentColor={project.accentColor}
-                                    title={`${project.name.toLowerCase()} demo`}
-                                />
-                            </div>
-                        </motion.div>
-                    </div>
-                </section>
+                {project.terminalDemo && (
+                    <section className="py-16 sm:py-20 bg-surface/20">
+                        <div className="max-w-content mx-auto px-6">
+                            <motion.div
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <h2 className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase mb-6">
+                                    Terminal Demo
+                                </h2>
+                                <div className="max-w-3xl">
+                                    <TerminalDemo
+                                        steps={project.terminalDemo}
+                                        accentColor={project.accentColor}
+                                        title={`${project.name.toLowerCase()} demo`}
+                                    />
+                                    {project.terminalDemoNote && (
+                                        <p className="font-mono text-[11px] text-text-secondary mt-3">
+                                            {project.terminalDemoNote}
+                                        </p>
+                                    )}
+                                </div>
+                            </motion.div>
+                        </div>
+                    </section>
+                )}
 
                 {/* Architecture */}
                 <section className="py-16 sm:py-20">
@@ -319,6 +330,6 @@ export default function ProjectDetail({ project }: { project: ProjectData }) {
                     </div>
                 </section>
             </div>
-        </article>
+        </main>
     );
 }

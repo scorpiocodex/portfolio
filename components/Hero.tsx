@@ -15,12 +15,12 @@ interface TerminalLine {
 
 const TERMINAL_LINES: TerminalLine[] = [
   { text: "$ san --whoami", type: "command" },
-  { text: "✓ Full-Stack & Systems Dev  |  BIT · Scaler", type: "success" },
-  { text: "✓ Python · JavaScript · React · Node.js · PostgreSQL", type: "success" },
-  { text: "$ nyx vault init", type: "command" },
-  { text: "✓ Argon2id key derived — XChaCha20-Poly1305 ready", type: "success" },
-  { text: "✓ Vault sealed — zero-knowledge, offline-first", type: "success" },
-  { text: "∎ Vault ready — awaiting commands", type: "info" },
+  { text: "✓ Python Full-Stack Developer  |  BIT · Scaler", type: "success" },
+  { text: "✓ Python · FastAPI · PostgreSQL · React · LLM", type: "success" },
+  { text: "$ san --shipped", type: "command" },
+  { text: "✓ BakeriQ — WhatsApp ordering platform, 371 tests", type: "success" },
+  { text: "✓ ScorpioWatch + Nyxora published on PyPI", type: "success" },
+  { text: "∎ Open to Python backend & full-stack roles", type: "info" },
 ];
 
 const lineColorClass: Record<TerminalLine["type"], string> = {
@@ -136,7 +136,7 @@ export default function Hero() {
                 <div className="relative w-full h-full rounded-full overflow-hidden bg-[#0D1117]">
                   <Image
                     src="/avatar.png"
-                    alt="San Shibu — Full-Stack Developer avatar"
+                    alt="San Shibu — Python Full-Stack Developer avatar"
                     fill
                     sizes="(min-width: 640px) 80px, 64px"
                     className="object-cover scale-110"
@@ -152,7 +152,7 @@ export default function Hero() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
                   </span>
                   <span className="font-mono text-[11px] text-text-secondary tracking-[0.18em] uppercase">
-                    Full-Stack Developer
+                    Python Full-Stack Developer
                   </span>
                 </div>
                 <div className="font-mono text-[11px] text-text-secondary/70 tracking-[0.18em] uppercase ml-[18px]">
@@ -171,11 +171,11 @@ export default function Hero() {
 
             {/* Subheading */}
             <p className="text-text-secondary text-[1.05rem] leading-[1.75] mb-10 max-w-[400px] font-inter">
-              React & Node.js web applications.
+              FastAPI & React applications.
               <br />
-              Python automation tooling.
+              LLM-powered automation.
               <br />
-              Linux-native development.
+              Open-source Python on PyPI.
             </p>
 
             {/* CTAs */}
@@ -247,7 +247,7 @@ export default function Hero() {
                 <div className="px-3 sm:px-5 pt-5 pb-6 font-mono text-[11px] sm:text-[13px] leading-[1.85] min-h-[200px] sm:min-h-[240px] overflow-x-auto">
                   {/* Path prompt */}
                   <div className="text-text-secondary/40 text-[11px] mb-3 select-none">
-                    san@scorpiocodex:~/projects/nyxora
+                    san@scorpiocodex:~/projects
                   </div>
 
                   {TERMINAL_LINES.map((line, i) => {
@@ -276,7 +276,7 @@ export default function Hero() {
             <div className="mt-4 flex items-center gap-2 px-1">
               <div className="h-px flex-1 bg-border/40" />
               <span className="font-mono text-[10px] text-text-secondary/40 tracking-widest">
-                LIVE ENVIRONMENT
+                SIMULATED SESSION
               </span>
               <div className="h-px flex-1 bg-border/40" />
             </div>

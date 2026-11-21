@@ -91,7 +91,7 @@ export default function Image() {
               fontFamily: "monospace",
             }}
           >
-            Full-Stack Developer · IT Professional
+            Python Full-Stack Developer
           </div>
 
           {/* Name */}
@@ -122,7 +122,7 @@ export default function Image() {
 
           {/* Stack chips */}
           <div style={{ display: "flex", gap: 12 }}>
-            {["React", "Node.js", "Python", "PostgreSQL"].map((t) => (
+            {["Python", "FastAPI", "PostgreSQL", "React"].map((t) => (
               <div
                 key={t}
                 style={{

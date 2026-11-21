@@ -1,5 +1,3 @@
-"use client";
-
 import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 

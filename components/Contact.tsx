@@ -1,5 +1,3 @@
-"use client";
-
 import { RESUME, SOCIAL } from "@/lib/constants";
 import { AnimatedSectionNumber } from "./AnimatedElements";
 import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
@@ -63,9 +61,9 @@ export default function Contact() {
                 Let&apos;s build something great together.
               </p>
               <p className="text-text-secondary text-base leading-[1.75] mb-8">
-                Available for engineering roles, internships, and open source
-                collaboration. If you&apos;re working on web applications, developer
-                tooling, or interesting IT projects — let&apos;s connect.
+                Open to Python backend and full-stack developer roles, and to open-source
+                collaboration. If you&apos;re building with FastAPI, React, or LLM tooling —
+                let&apos;s connect.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Magnetic strength={20}>
