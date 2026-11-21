@@ -5,7 +5,7 @@ import { FadeIn, FadeInItem, FadeInStagger } from "./FadeIn";
 import { ExternalLinkIcon, GithubIcon, StarIcon } from "./icons";
 
 export default function GitHub({ data }: { data: GitHubData }) {
-  const { user, repos, contributions } = data;
+  const { user, repos, reposSource, contributions } = data;
 
   return (
     <section id="github" className="py-24 lg:py-32">
@@ -63,7 +63,7 @@ export default function GitHub({ data }: { data: GitHubData }) {
         {/* Pinned repos label */}
         <FadeIn delay={0.08} className="mb-4">
           <span className="font-mono text-[11px] text-text-secondary tracking-widest uppercase">
-            Pinned Repositories
+            {reposSource === "pinned" ? "Pinned Repositories" : "Featured Repositories"}
           </span>
         </FadeIn>
 
@@ -128,7 +128,7 @@ export default function GitHub({ data }: { data: GitHubData }) {
         {/* Contribution graph */}
         <FadeIn delay={0.1} className="mt-8">
           <div className="p-5 rounded-card border border-border bg-surface/30">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 mb-4">
               <span className="font-mono text-[11px] text-text-secondary tracking-widest uppercase">
                 Contribution Activity (Half Year)
               </span>

@@ -30,6 +30,8 @@ export interface GitHubData {
     url: string;
   };
   repos: Repo[];
+  /** "pinned" = the profile's pinned repos from the API; "featured" = the site's own project list. */
+  reposSource: "pinned" | "featured";
   /**
    * Real contribution weeks from GitHub, or null when live data is unavailable.
    * The site never invents activity: null renders an explicit "unavailable" state.
@@ -96,6 +98,7 @@ export function getStaticFallback(): GitHubData {
       url: project.github,
       accent: project.accentColor,
     })),
+    reposSource: "featured",
     contributions: null,
   };
 }
@@ -181,6 +184,7 @@ async function fetchLiveData(token: string): Promise<GitHubData> {
       url: user.url,
     },
     repos: repos.length > 0 ? repos : getStaticFallback().repos,
+    reposSource: repos.length > 0 ? "pinned" : "featured",
     contributions: weeks.slice(-CONTRIBUTION_WEEKS),
   };
 }

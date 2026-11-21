@@ -30,7 +30,7 @@ export default function Footer() {
 
             {/* Sitemap Navigation */}
             <nav aria-label="Footer navigation">
-              <h3 className="font-mono text-[11px] font-semibold text-text-primary tracking-widest uppercase mb-5">
+              <h3 className="font-mono text-[11px] font-medium text-text-primary tracking-widest uppercase mb-5">
                 Navigation
               </h3>
               <ul className="space-y-3 text-sm text-text-secondary">
@@ -49,7 +49,7 @@ export default function Footer() {
 
             {/* Social / Connect */}
             <div>
-              <h3 className="font-mono text-[11px] font-semibold text-text-primary tracking-widest uppercase mb-5">
+              <h3 className="font-mono text-[11px] font-medium text-text-primary tracking-widest uppercase mb-5">
                 Connect
               </h3>
               <ul className="space-y-3 text-sm text-text-secondary">

@@ -8,7 +8,7 @@ function SkillRow({ name, color }: { name: string; color: string }) {
   const Icon = SKILL_ICONS[name];
 
   return (
-    <li className="group/skill flex items-center gap-3 py-2 px-3 -mx-3 rounded-lg hover:bg-white/[0.03] transition-colors duration-200 cursor-default">
+    <li className="group/skill flex items-center gap-3 py-2 px-3 -mx-3 break-inside-avoid rounded-lg hover:bg-white/[0.03] transition-colors duration-200 cursor-default">
       <div
         aria-hidden="true"
         className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 transition-transform duration-200 group-hover/skill:scale-110"
@@ -55,7 +55,8 @@ function SkillCard({ group }: { group: SkillGroup }) {
         </h3>
       </div>
 
-      <ul className="flex flex-col">
+      {/* Two newspaper-style columns once the card is wide enough: halves the height of long lists. */}
+      <ul className="sm:columns-2 sm:gap-x-8">
         {group.skills.map((skill) => (
           <SkillRow key={skill} name={skill} color={group.color} />
         ))}
@@ -75,6 +76,11 @@ function SkillCard({ group }: { group: SkillGroup }) {
   );
 }
 
+/* Left column = first half of the groups, right column = the rest. Columns are independent
+   flex stacks (not grid rows), so one tall card can't stretch its neighbours into empty boxes. */
+const SPLIT = Math.ceil(SKILL_GROUPS.length / 2);
+const COLUMNS = [SKILL_GROUPS.slice(0, SPLIT), SKILL_GROUPS.slice(SPLIT)];
+
 export default function Skills() {
   return (
     <section id="skills" className="py-24 lg:py-32">
@@ -91,11 +97,18 @@ export default function Skills() {
         </FadeIn>
 
         <FadeInStagger staggerDelay={0.1}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {SKILL_GROUPS.map((group) => (
-              <FadeInItem key={group.category}>
-                <SkillCard group={group} />
-              </FadeInItem>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {COLUMNS.map((column, i) => (
+              <div key={i} className="flex flex-col gap-5">
+                {column.map((group, j) => (
+                  <FadeInItem
+                    key={group.category}
+                    className={j === column.length - 1 ? "flex-1" : ""}
+                  >
+                    <SkillCard group={group} />
+                  </FadeInItem>
+                ))}
+              </div>
             ))}
           </div>
         </FadeInStagger>

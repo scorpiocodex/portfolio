@@ -1,4 +1,6 @@
-/* ─── Skills, grouped exactly as on the resume ─────────────────────────── */
+/* ─── Skills, grouped as on the resume ─────────────────────────────────────
+   Order is the on-page reading order: the first three groups form the left column and
+   the rest the right column (see Skills.tsx), which keeps both columns about equally tall. */
 
 export interface SkillGroup {
   category: string;
@@ -15,8 +17,25 @@ export const SKILL_GROUPS: SkillGroup[] = [
     skills: ["Python", "JavaScript", "SQL", "HTML/CSS"],
   },
   {
-    category: "Backend",
+    category: "Frontend",
     number: "02",
+    color: "#00B8D4",
+    skills: ["React", "Vite", "Tailwind CSS"],
+  },
+  {
+    category: "AI / LLM",
+    number: "03",
+    color: "#F0883E",
+    skills: [
+      "LLM integration",
+      "Ollama",
+      "Llama 3.2",
+      "Prompt engineering for structured data extraction",
+    ],
+  },
+  {
+    category: "Backend",
+    number: "04",
     color: "#7C3AED",
     skills: [
       "FastAPI",
@@ -30,23 +49,6 @@ export const SKILL_GROUPS: SkillGroup[] = [
       "asyncio",
       "Node.js",
       "Express",
-    ],
-  },
-  {
-    category: "Frontend",
-    number: "03",
-    color: "#00B8D4",
-    skills: ["React", "Vite", "Tailwind CSS"],
-  },
-  {
-    category: "AI / LLM",
-    number: "04",
-    color: "#F0883E",
-    skills: [
-      "LLM integration",
-      "Ollama",
-      "Llama 3.2",
-      "Prompt engineering for structured data extraction",
     ],
   },
   {

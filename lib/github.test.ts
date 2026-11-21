@@ -66,7 +66,8 @@ describe("static fallback", () => {
   });
 
   it("lists the featured projects with unknown star counts", () => {
-    const { repos } = getStaticFallback();
+    const { repos, reposSource } = getStaticFallback();
+    expect(reposSource).toBe("featured");
     expect(repos.map((r) => r.name)).toEqual(PROJECTS.map((p) => p.name));
     expect(repos.every((r) => r.stars === null)).toBe(true);
   });
@@ -93,6 +94,7 @@ describe("getGitHubData", () => {
     expect(data.contributions).toHaveLength(26);
     // The oldest kept week is week index 4 of 30 (counts are w + 1).
     expect(data.contributions?.[0].contributionDays[0].contributionCount).toBe(5);
+    expect(data.reposSource).toBe("pinned");
     expect(data.repos[0]).toMatchObject({ name: "Nyxora", stars: 7, language: "Python" });
     expect(data.repos[0].description).toBe("");
   });
@@ -104,6 +106,7 @@ describe("getGitHubData", () => {
     const data = await getGitHubData();
 
     expect(data.repos.map((r) => r.name)).toEqual(PROJECTS.map((p) => p.name));
+    expect(data.reposSource).toBe("featured");
     expect(data.contributions).not.toBeNull();
   });
 

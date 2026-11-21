@@ -33,7 +33,7 @@ const CONTACT_LINKS = [
     value: SOCIAL.linkedin.name,
     href: SOCIAL.linkedin.url,
     icon: <LinkedInIcon className="w-4 h-4" />,
-    color: "#0A66C2",
+    color: "#378FE9",
     external: true,
   },
   {
