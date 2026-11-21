@@ -1,71 +1,88 @@
 "use client";
 
 import { NAV_LINKS, SOCIAL } from "@/lib/constants";
+import { useFocusTrap } from "@/lib/useFocusTrap";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { GithubIcon } from "./icons";
 import ThemeToggle from "./ThemeToggle";
 
-const navLinks = NAV_LINKS;
+const noopSubscribe = () => () => {};
+const getIsApplePlatform = () =>
+  /Mac|iP(hone|ad|od)/.test(navigator.userAgent || navigator.platform || "");
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const [isMac, setIsMac] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setIsMac(/Mac|iP(hone|ad|od)/.test(navigator.platform || navigator.userAgent));
-  }, []);
+  // Static for the page's lifetime: subscribe is a no-op, the server snapshot is "not Apple".
+  const isMac = useSyncExternalStore(noopSubscribe, getIsApplePlatform, () => false);
 
+  // Scroll-spy: one rAF-throttled listener that only touches state when a value changes.
   useEffect(() => {
-    const onScroll = () => {
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
       setScrolled(window.scrollY > 24);
 
       let current = "";
-      for (const link of [...navLinks]) {
+      for (const link of NAV_LINKS) {
         const el = document.getElementById(link.id);
-        if (el && el.getBoundingClientRect().top <= 100) {
-          current = link.id;
-        }
+        if (el && el.getBoundingClientRect().top <= 100) current = link.id;
       }
       setActiveSection(current);
     };
 
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    update();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
+  // Mobile drawer: Escape closes, background scroll locks, focus moves in and returns.
   useEffect(() => {
+    if (!menuOpen) return;
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && menuOpen) setMenuOpen(false);
+      if (e.key === "Escape") setMenuOpen(false);
     };
     document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
 
-    // Prevent background scrolling when menu is open
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    const button = menuButtonRef.current;
+    const focusTimer = window.setTimeout(() => {
+      drawerRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    }, 50);
 
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      window.clearTimeout(focusTimer);
+      button?.focus({ preventScroll: true });
     };
   }, [menuOpen]);
+
+  useFocusTrap(drawerRef, menuOpen);
 
   return (
     <>
       {/* Static accent base line */}
-      <div className="fixed top-0 left-0 right-0 z-[60] h-[2px] accent-line" />
+      <div aria-hidden="true" className="fixed top-0 left-0 right-0 z-[60] h-[2px] accent-line" />
 
       <header
-        className={`fixed top-[2px] left-0 right-0 z-50 transition-all duration-300 ${scrolled
-          ? "bg-bg/90 backdrop-blur-md border-b border-border/60"
-          : "bg-transparent"
-          }`}
+        className={`fixed top-[2px] left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled ? "bg-bg/90 backdrop-blur-md border-b border-border/60" : "bg-transparent"
+        }`}
       >
         <div className="max-w-content mx-auto px-6 py-3.5 flex items-center justify-between">
           {/* Logo */}
@@ -78,16 +95,16 @@ export default function Navigation() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-7" aria-label="Main navigation">
-            {navLinks.map((link) => {
+            {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.id;
               return (
                 <a
-                  key={link.label}
+                  key={link.id}
                   href={link.href}
-                  className={`nav-link text-[11px] transition-colors duration-200 tracking-wider uppercase font-mono ${isActive
-                    ? "text-accent"
-                    : "text-text-secondary hover:text-text-primary"
-                    }`}
+                  aria-current={isActive ? "location" : undefined}
+                  className={`nav-link text-[11px] transition-colors duration-200 tracking-wider uppercase font-mono ${
+                    isActive ? "text-accent" : "text-text-secondary hover:text-text-primary"
+                  }`}
                 >
                   {link.label}
                 </a>
@@ -121,6 +138,7 @@ export default function Navigation() {
 
           {/* Mobile Hamburger */}
           <button
+            ref={menuButtonRef}
             onClick={() => setMenuOpen(!menuOpen)}
             className="md:hidden flex flex-col gap-1.5 p-1 text-text-secondary hover:text-text-primary transition-colors"
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
@@ -160,29 +178,43 @@ export default function Navigation() {
 
             {/* Drawer */}
             <motion.div
+              ref={drawerRef}
               id="mobile-menu"
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
+              tabIndex={-1}
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 bottom-0 w-[240px] bg-surface/95 backdrop-blur-xl border-l border-border z-40 md:hidden flex flex-col pt-24 shadow-2xl"
+              className="fixed top-0 right-0 bottom-0 w-[240px] bg-surface/95 backdrop-blur-xl border-l border-border z-40 md:hidden flex flex-col pt-24 shadow-2xl outline-none"
             >
-              <nav className="flex-1 overflow-y-auto px-8 py-6 flex flex-col gap-6" aria-label="Mobile navigation">
-                {navLinks.map((link, i) => (
+              <nav
+                className="flex-1 overflow-y-auto px-8 py-6 flex flex-col gap-6"
+                aria-label="Mobile navigation"
+              >
+                {/* Keyboard users can't reach the hamburger while focus is trapped here. */}
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="sr-only focus:not-sr-only font-mono text-sm text-accent text-left"
+                >
+                  Close menu
+                </button>
+                {NAV_LINKS.map((link, i) => (
                   <motion.a
-                    key={link.label}
+                    key={link.id}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
+                    aria-current={activeSection === link.id ? "location" : undefined}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
-                    className={`text-base tracking-wide transition-colors font-mono ${activeSection === link.id
-                      ? "text-accent"
-                      : "text-text-secondary hover:text-text-primary"
-                      }`}
+                    className={`text-base tracking-wide transition-colors font-mono ${
+                      activeSection === link.id
+                        ? "text-accent"
+                        : "text-text-secondary hover:text-text-primary"
+                    }`}
                   >
                     {link.label}
                   </motion.a>
@@ -190,7 +222,7 @@ export default function Navigation() {
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + navLinks.length * 0.05, duration: 0.3 }}
+                  transition={{ delay: 0.1 + NAV_LINKS.length * 0.05, duration: 0.3 }}
                   className="mt-4 pt-6 flex flex-col gap-6 border-t border-border/50"
                 >
                   <div className="flex items-center gap-3">
@@ -206,9 +238,12 @@ export default function Navigation() {
                     <GithubIcon className="w-5 h-5" />
                     {SOCIAL.github.username}
                   </a>
-                  <div className="flex items-center gap-2 mt-2 opacity-50">
-                    <kbd className="font-mono text-[10px] border border-border rounded px-1.5 py-0.5 bg-surface text-text-secondary">⌘K</kbd>
-                    <span className="font-mono text-[10px] text-text-secondary">Quick search</span>
+                  {/* The keyboard shortcut only makes sense where there is a keyboard-capable pointer. */}
+                  <div className="hidden [@media(hover:hover)]:flex items-center gap-2 mt-2 text-text-secondary">
+                    <kbd className="font-mono text-[10px] border border-border rounded px-1.5 py-0.5 bg-surface">
+                      {isMac ? "⌘K" : "Ctrl K"}
+                    </kbd>
+                    <span className="font-mono text-[10px]">Quick search</span>
                   </div>
                 </motion.div>
               </nav>

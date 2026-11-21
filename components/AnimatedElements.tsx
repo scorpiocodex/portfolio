@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
+import { motion, useInView, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 /**
@@ -22,6 +22,7 @@ export function AnimatedCounter({
 }) {
     const ref = useRef<HTMLSpanElement>(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
+    const reduceMotion = useReducedMotion();
 
     const springValue = useSpring(0, {
         duration: duration * 1000,
@@ -31,10 +32,10 @@ export function AnimatedCounter({
     const displayValue = useTransform(springValue, (v) => Math.round(v));
 
     useEffect(() => {
-        if (isInView) {
-            springValue.set(value);
-        }
-    }, [isInView, value, springValue]);
+        if (!isInView) return;
+        if (reduceMotion) springValue.jump(value);
+        else springValue.set(value);
+    }, [isInView, value, springValue, reduceMotion]);
 
     useEffect(() => {
         const unsubscribe = displayValue.on("change", (v) => {

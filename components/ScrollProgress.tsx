@@ -1,29 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion, useScroll } from "framer-motion";
 
+/** Reading-progress bar driven by a motion value — no React re-render per scroll event. */
 export default function ScrollProgress() {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      setProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const { scrollYProgress } = useScroll();
 
   return (
-    <div className="fixed top-0 left-0 w-full z-[70] h-[2px] bg-transparent pointer-events-none">
-      <div
-        className="h-[2px] bg-gradient-to-r from-accent via-glow to-accent-purple transition-none will-change-[width]"
-        style={{ width: `${progress}%` }}
-        aria-hidden="true"
+    <div
+      aria-hidden="true"
+      className="fixed top-0 left-0 w-full z-[70] h-[2px] bg-transparent pointer-events-none"
+    >
+      <motion.div
+        style={{ scaleX: scrollYProgress }}
+        className="h-full w-full origin-left bg-gradient-to-r from-accent via-glow to-accent-purple"
       />
     </div>
   );
