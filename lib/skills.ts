@@ -68,6 +68,3 @@ export const SKILL_GROUPS: SkillGroup[] = [
     ],
   },
 ];
-
-/** Total number of distinct skills listed — used for the About-page counter. */
-export const SKILL_COUNT = new Set(SKILL_GROUPS.flatMap((g) => g.skills)).size;

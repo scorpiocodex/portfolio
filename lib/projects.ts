@@ -75,7 +75,7 @@ export const PROJECTS: ProjectData[] = [
       {
         title: "Layer boundaries enforced in CI",
         description:
-          "mypy --strict, 100% test coverage and an import contract keep the layered architecture from eroding as features land.",
+          "mypy --strict and an import-linter contract run in CI on every change, and test coverage sits at 100%, so the layered architecture can’t erode unnoticed as features land.",
       },
     ],
     terminalDemo: [
