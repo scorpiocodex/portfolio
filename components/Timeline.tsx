@@ -46,17 +46,6 @@ const TIMELINE_DATA: TimelineEntry[] = [
     link: { label: "BakeriQ on GitHub", href: "https://github.com/scorpiocodex/bakeriq" },
   },
   {
-    period: "Oct 2024 – Present",
-    kind: "Work",
-    title: "Freelance IT Support",
-    org: "Self-employed",
-    location: "Ernakulam, Kerala",
-    highlights: [
-      "Set up and maintain Windows and Linux PCs for home users: OS installs, drivers, email and security software.",
-      "Diagnose hardware, software and home-network faults, and handle backups, updates and system cleanup.",
-    ],
-  },
-  {
     period: "Feb 2019 – Jun 2022",
     kind: "Education",
     title: "Bachelor of Information Technology",
